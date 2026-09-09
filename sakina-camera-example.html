@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>سكينة — قراءة التعبير</title>
+<style>
+  :root{--bg:#0f1115;--card:#181c24;--txt:#eef1f6;--mut:#8e97a8;--acc:#6ea8fe}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+       font-family:system-ui,"Segoe UI",Tahoma,sans-serif;
+       display:flex;flex-direction:column;align-items:center;gap:16px;padding:20px}
+  #cam{width:280px;height:280px;border-radius:20px;overflow:hidden;background:#000}
+  #cam canvas{width:100%;height:100%;object-fit:cover}
+  .card{background:var(--card);border-radius:16px;padding:16px;width:min(420px,100%)}
+  .row{display:flex;align-items:center;gap:10px;margin:8px 0}
+  .row span:first-child{width:70px;font-size:14px;color:var(--mut)}
+  .track{flex:1;height:8px;background:#262c38;border-radius:99px;overflow:hidden}
+  .fill{height:100%;width:0;background:var(--acc);
+        transition:width .35s cubic-bezier(.4,0,.2,1)}  /* smooth, no jitter */
+  .pct{width:44px;text-align:end;font-size:13px;color:var(--mut);
+       font-variant-numeric:tabular-nums}
+  #status{font-size:15px;color:var(--mut);min-height:22px;text-align:center}
+  #result{display:none;text-align:center}
+  #result.on{display:block}
+  #result h2{margin:0 0 6px;font-size:28px}
+  button{background:var(--acc);color:#0f1115;border:0;border-radius:12px;
+         padding:12px 22px;font-size:16px;font-weight:600;cursor:pointer}
+  button.ghost{background:#262c38;color:var(--txt)}
+</style>
+</head>
+<body>
+
+  <div id="cam"></div>
+  <div id="status">جارٍ التحضير…</div>
+
+  <div class="card" id="bars"></div>
+
+  <div class="card" id="result">
+    <h2 id="rLabel">—</h2>
+    <div id="rConf" style="color:var(--mut);font-size:14px"></div>
+    <img id="rShot" alt="" style="width:120px;border-radius:12px;margin:12px 0">
+    <div><button id="restart" class="ghost">إعادة المحاولة</button></div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+<script src="./sakina-face-lock.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const bars = {};
+
+function bar(label){
+  if(bars[label]) return bars[label];
+  const row = document.createElement('div'); row.className='row';
+  row.innerHTML = `<span>${label}</span>
+                   <span class="track"><span class="fill"></span></span>
+                   <span class="pct">0%</span>`;
+  $('#bars').appendChild(row);
+  return bars[label] = {fill: row.querySelector('.fill'), pct: row.querySelector('.pct')};
+}
+
+// live (smoothed) values
+SakinaFace.on('tick', d => {
+  d.ranked.forEach(({label, score}) => {
+    const b = bar(label);
+    b.fill.style.width = (score*100).toFixed(0) + '%';
+    b.pct.textContent  = (score*100).toFixed(0) + '%';
+  });
+  $('#status').textContent = d.warmingUp
+    ? 'ابقَ ثابتًا أمام الكاميرا…'
+    : `يقرأ التعبير… ${(d.progress*100).toFixed(0)}%`;
+});
+
+// locked — reading is captured and held
+SakinaFace.on('lock', r => {
+  $('#status').textContent = r.uncertain
+    ? 'القراءة غير واضحة — هذا أقرب احتمال'
+    : 'تم التقاط التعبير';
+  $('#rLabel').textContent = r.labelAr;
+  $('#rConf').textContent  = 'الثقة: ' + (r.confidence*100).toFixed(0) + '%';
+  if(r.imageDataUrl) $('#rShot').src = r.imageDataUrl;
+  $('#result').classList.add('on');
+  $('#bars').style.opacity = .45;
+
+  // >>> hand off to the conversation flow, e.g.
+  // startTherapeuticChat(r.label, r.confidence);
+});
+
+SakinaFace.on('restart', () => {
+  $('#result').classList.remove('on');
+  $('#bars').style.opacity = 1;
+});
+
+$('#restart').onclick = () => SakinaFace.restart();
+
+(async () => {
+  try{
+    await SakinaFace.init($('#cam'));
+    await SakinaFace.start();
+  }catch(e){
+    $('#status').textContent = 'تعذّر تشغيل الكاميرا: ' + e.message;
+  }
+})();
+</script>
+</body>
+</html>
