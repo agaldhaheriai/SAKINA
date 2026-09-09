@@ -78,9 +78,11 @@ video,#snap{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;tr
 .controls .btn{flex:1 1 150px}
 .bars{display:flex;flex-direction:column;gap:9px;margin-top:14px}
 .bar{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;font-size:13px}
-.bar .track{grid-column:1/-1;height:7px;border-radius:99px;background:var(--sand-2);overflow:hidden}
-.bar .fill{height:100%;border-radius:99px;background:var(--ink-soft);transition:width .45s cubic-bezier(.2,.8,.2,1)}
-.bar.lead .fill{background:var(--teal)}
+.bar .track{display:block;grid-column:1/-1;height:7px;border-radius:99px;background:var(--sand-2);overflow:hidden}
+.bar .fill{display:block;width:0;min-width:3px;height:100%;border-radius:99px;background:var(--ink-soft);transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.bar.lead .fill{background:linear-gradient(90deg,var(--teal),var(--gold))}
+.bar.warn .fill{background:linear-gradient(90deg,var(--clay),var(--gold))}
+.bar span:first-child{font-weight:500}
 .bar .pct{font-variant-numeric:tabular-nums;color:var(--ink-soft);font-size:12.5px}
 .verdict{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .verdict .big{font-family:Zain,sans-serif;font-size:30px;font-weight:800;line-height:1.1}
@@ -107,12 +109,40 @@ textarea::placeholder{color:var(--ink-soft)}
 .orb span{font-family:Zain,sans-serif;font-size:19px;font-weight:700;color:var(--ink)}
 .count{font-variant-numeric:tabular-nums;color:var(--ink-soft);font-size:13px}
 @media (prefers-reduced-motion:reduce){.orb{transition:none}.scanline{animation:none}}
+.rec{background:var(--teal-soft);border:1px solid var(--line);border-radius:14px;padding:15px;margin-bottom:18px}
+.rec h3{font-family:Zain,sans-serif;font-size:19px;margin:2px 0 2px;font-weight:700}
+.recwhy{font-size:12.5px;color:var(--ink-soft);margin:0 0 6px}
+ol.steps{margin:10px 0 0;padding-inline-start:20px;display:flex;flex-direction:column;gap:10px}
+ol.steps li::marker{color:var(--teal);font-weight:700}
+ol.steps b{display:block;font-family:Zain,sans-serif;font-size:16.5px;font-weight:700;line-height:1.3}
+ol.steps span{color:var(--ink-soft);font-size:14px}
+.tag{display:inline-block;font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  padding:2px 8px;border-radius:999px;background:var(--teal-soft);color:var(--teal);margin-inline-start:8px;vertical-align:2px}
 ul.plain{margin:6px 0 0;padding-inline-start:20px;display:flex;flex-direction:column;gap:7px;font-size:14.5px}
 ul.plain li::marker{color:var(--teal)}
 .practice{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
 .practice:first-of-type{border-top:0;padding-top:0;margin-top:0}
 .practice h3{font-family:Zain,sans-serif;font-size:17px;margin:0 0 3px;font-weight:700}
 .practice p{font-size:14px;color:var(--ink-soft)}
+.book{display:flex;gap:12px;border-top:1px solid var(--line);padding:13px 0}
+.book:first-of-type{border-top:0;padding-top:2px}
+.book .spine{width:6px;flex:none;border-radius:3px;background:linear-gradient(var(--teal),var(--gold))}
+.book h3{font-family:Zain,sans-serif;font-size:17.5px;margin:0;font-weight:700;line-height:1.25}
+.book .by{font-size:12.5px;color:var(--ink-soft);margin:1px 0 4px}
+.book p{font-size:14px;color:var(--ink-soft);margin:0}
+.links{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+a.blink{font-size:12.5px;font-weight:600;text-decoration:none;border:1px solid var(--line);
+  padding:6px 12px;border-radius:999px;color:var(--ink)}
+a.blink:hover{border-color:var(--teal);color:var(--teal)}
+a.blink.free{background:var(--teal);color:#fff;border-color:transparent}
+a.blink.free:hover{color:#fff;filter:brightness(1.07)}
+.quick button.on{border-style:solid;border-color:var(--teal);color:var(--teal);background:var(--teal-soft)}
+.livepill{position:absolute;top:12px;inset-inline-end:12px;display:flex;align-items:center;gap:6px;
+  background:rgba(10,30,28,.62);color:#fff;font-size:11.5px;font-weight:600;letter-spacing:.05em;
+  padding:5px 10px;border-radius:999px;backdrop-filter:blur(6px)}
+.livepill i{width:7px;height:7px;border-radius:50%;background:#5FD3B8;animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.livepill i{animation:none}}
 .qr{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
 .qr .box{background:#fff;padding:10px;border-radius:14px;border:1px solid var(--line);line-height:0}
 .qr .box canvas,.qr .box svg,.qr .box img{width:132px;height:132px;display:block}
@@ -145,10 +175,12 @@ footer b{color:var(--ink)}
       <canvas id="snap" width="224" height="224"></canvas>
       <div class="stage-msg" id="stagemsg">Turn on the camera and let your face fill the frame. Nothing leaves your phone — the model runs on this device.</div>
       <div class="scanline hidden" id="scanline"></div>
+      <div class="livepill hidden" id="livepill"><i></i><span id="livetxt">LIVE</span></div>
     </div>
     <div class="controls">
       <button class="btn" id="start" type="button">Turn on camera</button>
-      <button class="btn ghost" id="read" type="button" disabled>Read my expression</button>
+      <button class="btn ghost" id="read" type="button" disabled>Read now</button>
+      <button class="btn ghost" id="reset" type="button">Start over</button>
     </div>
   </section>
 
@@ -172,6 +204,15 @@ footer b{color:var(--ink)}
     </div>
   </section>
 
+  <section class="card hidden" id="booksCard">
+    <p class="eyebrow" id="t-books">Reading that helps</p>
+    <h2 id="booksTitle"></h2>
+    <p id="booksNote" style="color:var(--ink-soft);font-size:14px"></p>
+    <div class="quick" id="interests"></div>
+    <div id="booklist" style="margin-top:6px"></div>
+    <p style="margin-top:14px"><a class="blink" id="hindawi" href="https://www.hindawi.org/books/" target="_blank" rel="noopener">Hindawi — free Arabic library</a></p>
+  </section>
+
   <section class="card">
     <p class="eyebrow" id="t-calm">Calm down together</p>
     <h2 id="t-breath">Box breathing</h2>
@@ -182,6 +223,13 @@ footer b{color:var(--ink)}
       <button class="btn ghost" id="breathe" type="button">Start breathing</button>
     </div>
     <div id="practices" style="margin-top:18px"></div>
+  </section>
+
+  <section class="card">
+    <p class="eyebrow" id="t-sensory">Sensory kit</p>
+    <h2 id="sensoryTitle"></h2>
+    <p id="sensoryNote" style="color:var(--ink-soft);font-size:14px;margin-bottom:6px"></p>
+    <div id="sensorylist"></div>
   </section>
 
   <section class="card">
@@ -214,7 +262,7 @@ const KEYS=["sad","happy","angry"];
 const T={
  en:{dir:"ltr",lang:"en",langbtn:"العربية",title:"Sakina",sub:"A face check-in, then a calmer few minutes",
   stage:"Turn on the camera and let your face fill the frame. Nothing leaves your phone — the model runs on this device.",
-  start:"Turn on camera",stop:"Stop camera",read:"Read my expression",reading:"Reading",notread:"Not read yet",
+  start:"Turn on camera",stop:"Stop camera",read:"Read now",reading:"Reading",notread:"Not read yet",
   note:"Three expressions were trained into this model: sadness, happiness, anger.",
   loading:"Loading the model…",denied:"Camera access was refused. Allow it in your browser settings, then try again.",
   names:{sad:"Sadness",happy:"Happiness",angry:"Anger"},
@@ -233,16 +281,40 @@ const T={
       angry:["How strong is it right now, from 1 to 10?","What did you want to happen instead?","What is the cost if you act on it while it's this hot?","Thank you for saying it plainly."]},
   fbAdvice:{sad:"What tends to help with sadness like this: name it out loud once a day instead of pushing it down; keep sleep and meals steady even when you don't feel like it; move your body for ten minutes outdoors; and tell one person this week. If it keeps you from work, sleep or people for more than two weeks, that is the point to speak to a professional.",
             angry:"What tends to help with anger like this: wait before you answer — anger drops sharply after twenty minutes; breathe out longer than you breathe in; write the message you want to send and don't send it tonight; then ask what the anger is protecting — respect, fairness, or a boundary. Say that part calmly tomorrow."},
-  practicesTitle:"Practices",
-  practices:[["5-4-3-2-1 grounding","Name five things you see, four you can touch, three you hear, two you smell, one you taste. It pulls you out of the loop in your head and back into the room."],
-             ["Longer out-breath","Breathe in for four, out for eight, for two minutes. A long exhale is the fastest switch your body has for calming itself."],
-             ["Cold water","Rinse your face and wrists with cold water for thirty seconds. It lowers heart rate quickly when anger spikes."],
-             ["Walk it out","Ten minutes of walking, phone in your pocket. Movement burns off the stress chemicals talking cannot reach."],
-             ["Write it, don't send it","Put the whole thing in a note — unedited. Read it tomorrow morning and decide then."],
-             ["One person","Tell one trusted person a single honest sentence about how you are. Carrying it alone is the part that makes it heavy."]]},
+  findBook:"Find the ebook",freeBook:"Read free",borrow:"Open Library",
+  booksEyebrow:"Reading that helps",booksNote:"Pick one, and read a page a night. A heavy stretch is not the time for a reading list.",
+  booksFor:{sad:"Five books for a heavy stretch",angry:"Four books on anger"},
+  booksHappy:"What are you into?",booksHappyNote:"A good mood is the right time to start something. Pick a subject and you get three.",
+  hindawi:"Hindawi — free Arabic library",
+  interests:{growth:"Personal growth",money:"Business & money",science:"Science",history:"History & the Emirates",fiction:"Fiction",faith:"Faith & spirit",sport:"Sport & fitness"},
+  sensoryEyebrow:"Sensory kit",sensoryTitle:"Things to hold, smell and feel",
+  sensoryNote:"The body settles through the senses faster than through thinking. Keep two or three of these within reach of where you usually sit.",
+  findIt:"Where to get it",pickedFor:"picked for you",
+  senses:{touch:"Touch",smell:"Smell",cold:"Temperature",sound:"Sound",taste:"Taste",sight:"Sight"},
+  practicesTitle:"All practices",recTitle:"Recommended for you now",allTitle:"All practices",
+  recFor:{sad:"Chosen because the camera read sadness.",angry:"Chosen because the camera read anger."},
+  forTag:{sad:"for sadness",angry:"for anger"},reset:"Start over",
+  therapy:{sad:{title:"A short plan for low mood",steps:[
+    ["Behavioural activation","Pick one small thing you used to enjoy and do it today, at low energy and without waiting to feel like it. The mood follows the action, not the other way round."],
+    ["Thought record","Write the thought that hurts most, then one piece of evidence for it and one against it. Aim for accurate, not positive."],
+    ["Three good things","Before sleep, write three things that went even slightly right today and what your part in each was."],
+    ["Give the day edges","Same wake time, daylight in the first hour, one meal you don't skip. Low mood loosens when the day has a shape."],
+    ["One contact","Send one message to one person today. Withdrawing is what deepens sadness fastest."]]},
+   angry:{title:"A short plan for anger",steps:[
+    ["Time-out first","Leave the situation for twenty minutes before you answer. Anger peaks fast and drops on its own; almost nothing you say in the first twenty minutes helps."],
+    ["Paced breathing","Breathe in four, out eight, for two minutes. The long exhale is what tells your body the threat is over."],
+    ["Reappraise","Ask: what else could explain what they did? You are looking for a second possible story, not an excuse."],
+    ["Say it as one sentence","\"When ___ happened, I felt ___, and what I need is ___.\" Say that tomorrow, calmly. Anger gets heard when it arrives as a request."],
+    ["Discharge it physically","Fifteen minutes of fast walking, stairs or a hard chore. Anger is energy in the body and it has to go somewhere."]]}},
+  practices:[["5-4-3-2-1 grounding","Name five things you see, four you can touch, three you hear, two you smell, one you taste. It pulls you out of the loop in your head and back into the room.",["sad","angry"]],
+             ["Longer out-breath","Breathe in for four, out for eight, for two minutes. A long exhale is the fastest switch your body has for calming itself.",["angry","sad"]],
+             ["Cold water","Rinse your face and wrists with cold water for thirty seconds. It lowers heart rate quickly when anger spikes.",["angry"]],
+             ["Walk it out","Ten minutes of walking, phone in your pocket. Movement burns off the stress chemicals talking cannot reach.",["sad","angry"]],
+             ["Write it, don't send it","Put the whole thing in a note — unedited. Read it tomorrow morning and decide then.",["angry"]],
+             ["One person","Tell one trusted person a single honest sentence about how you are. Carrying it alone is the part that makes it heavy.",["sad"]]]},
  ar:{dir:"rtl",lang:"ar",langbtn:"English",title:"سكينة",sub:"قراءة لملامح وجهك، ثم دقائق تهدّئك",
   stage:"شغّل الكاميرا واجعل وجهك يملأ الإطار. لا تخرج أي صورة من جهازك — النموذج يعمل داخل هاتفك.",
-  start:"تشغيل الكاميرا",stop:"إيقاف الكاميرا",read:"اقرأ تعبير وجهي",reading:"القراءة",notread:"لم تتم القراءة بعد",
+  start:"تشغيل الكاميرا",stop:"إيقاف الكاميرا",read:"اقرأ الآن",reading:"القراءة",notread:"لم تتم القراءة بعد",
   note:"دُرِّب النموذج على ثلاثة تعابير: الحزن، السعادة، الغضب.",
   loading:"جارٍ تحميل النموذج…",denied:"تم رفض الوصول إلى الكاميرا. اسمح بها من إعدادات المتصفح ثم أعد المحاولة.",
   names:{sad:"حزن",happy:"سعادة",angry:"غضب"},
@@ -261,13 +333,37 @@ const T={
       angry:["كم شدّة الغضب الآن من ١ إلى ١٠؟","ما الذي كنت تتمنى حدوثه بدلًا من ذلك؟","ما ثمن أن تتصرّف وأنت في هذه الحرارة؟","شكرًا لصراحتك."]},
   fbAdvice:{sad:"ما ينفع عادةً مع حزن كهذا: سمِّه بصوتك مرة كل يوم بدل كبته؛ حافظ على نومك وطعامك حتى دون رغبة؛ تحرّك عشر دقائق في الهواء الطلق؛ وأخبر شخصًا واحدًا هذا الأسبوع. وإن منعك عن عملك أو نومك أو الناس أكثر من أسبوعين، فهذه لحظة استشارة مختص.",
             angry:"ما ينفع عادةً مع الغضب: أجّل ردّك — تنخفض حدّة الغضب كثيرًا بعد عشرين دقيقة؛ اجعل زفيرك أطول من شهيقك؛ اكتب الرسالة التي تريد إرسالها ولا ترسلها الليلة؛ ثم اسأل: ما الذي يحميه غضبي — احترام، أم إنصاف، أم حدّ شخصي؟ قل ذلك بهدوء غدًا."},
-  practicesTitle:"ممارسات",
-  practices:[["تأريض ٥-٤-٣-٢-١","سمِّ خمسة أشياء تراها، وأربعة تلمسها، وثلاثة تسمعها، واثنين تشمّهما، وواحدًا تتذوّقه. يخرجك من دوّامة رأسك إلى الغرفة."],
-             ["زفير أطول","شهيق أربع عدّات وزفير ثماني، لمدة دقيقتين. الزفير الطويل أسرع مفتاح في جسدك للهدوء."],
-             ["ماء بارد","اغسل وجهك ومعصميك بماء بارد ثلاثين ثانية. يخفض النبض بسرعة عند اشتداد الغضب."],
-             ["امشِ قليلًا","عشر دقائق مشي والهاتف في جيبك. الحركة تصرّف ما لا يصل إليه الكلام."],
-             ["اكتبها ولا ترسلها","اكتب كل ما بداخلك في ملاحظة دون تنقيح. اقرأها صباح الغد ثم قرّر."],
-             ["شخص واحد","قل لشخص تثق به جملة صادقة واحدة عن حالك. حملها وحدك هو ما يجعلها ثقيلة."]]}
+  findBook:"ابحث عن الكتاب",freeBook:"اقرأ مجانًا",borrow:"مكتبة مفتوحة",
+  booksEyebrow:"قراءات تُعين",booksNote:"اختر كتابًا واحدًا واقرأ صفحة كل ليلة. المرحلة الثقيلة ليست وقت قائمة قراءة طويلة.",
+  booksFor:{sad:"خمسة كتب لمرحلة ثقيلة",angry:"أربعة كتب عن الغضب"},
+  booksHappy:"ما الذي يهمّك؟",booksHappyNote:"المزاج الجيد وقت مناسب لبدء شيء. اختر مجالًا وستحصل على ثلاثة كتب.",
+  hindawi:"هنداوي — مكتبة عربية مجانية",
+  interests:{growth:"تطوير الذات",money:"أعمال ومال",science:"علوم",history:"تاريخ والإمارات",fiction:"روايات",faith:"إيمان وروح",sport:"رياضة ولياقة"},
+  sensoryEyebrow:"حقيبة الحواس",sensoryTitle:"أشياء تُمسك وتُشمّ وتُحسّ",
+  sensoryNote:"يهدأ الجسد عبر الحواس أسرع مما يهدأ بالتفكير. اجعل اثنين أو ثلاثة منها قريبة من مكان جلوسك المعتاد.",
+  findIt:"من أين تحصل عليه",pickedFor:"مختار لك",
+  senses:{touch:"لمس",smell:"شمّ",cold:"حرارة",sound:"صوت",taste:"تذوّق",sight:"بصر"},
+  practicesTitle:"كل الممارسات",recTitle:"موصى به لك الآن",allTitle:"كل الممارسات",
+  recFor:{sad:"اختيرت لأن الكاميرا قرأت حزنًا.",angry:"اختيرت لأن الكاميرا قرأت غضبًا."},
+  forTag:{sad:"للحزن",angry:"للغضب"},reset:"ابدأ من جديد",
+  therapy:{sad:{title:"خطة قصيرة لانخفاض المزاج",steps:[
+    ["التنشيط السلوكي","اختر شيئًا صغيرًا كنت تستمتع به وافعله اليوم، حتى بطاقة منخفضة ودون انتظار الرغبة. المزاج يتبع الفعل لا العكس."],
+    ["سجل الأفكار","اكتب الفكرة الأكثر إيلامًا، ثم دليلًا واحدًا يؤيدها ودليلًا واحدًا ينفيها. الهدف الدقة لا التفاؤل."],
+    ["ثلاثة أشياء جيدة","قبل النوم اكتب ثلاثة أمور سارت بشكل جيد ولو قليلًا، وما كان دورك في كل منها."],
+    ["امنح يومك حدودًا","استيقاظ في الوقت نفسه، ضوء نهار في الساعة الأولى، ووجبة لا تتخطاها. المزاج المنخفض يخف حين يكون لليوم شكل."],
+    ["تواصل واحد","أرسل رسالة واحدة لشخص واحد اليوم. الانسحاب هو ما يعمّق الحزن أسرع من أي شيء."]]},
+   angry:{title:"خطة قصيرة للغضب",steps:[
+    ["اقطع الموقف أولًا","ابتعد عشرين دقيقة قبل أن ترد. الغضب يبلغ ذروته سريعًا ثم يهبط وحده، وما يُقال في أول عشرين دقيقة نادرًا ما ينفع."],
+    ["تنفّس منظَّم","شهيق أربع وزفير ثمان، لمدة دقيقتين. الزفير الطويل هو ما يخبر جسدك أن الخطر انتهى."],
+    ["أعد التفسير","اسأل: ما التفسير الآخر المحتمل لما فعله؟ أنت تبحث عن رواية ثانية ممكنة، لا عن عذر."],
+    ["قلها في جملة واحدة","«حين حدث ___، شعرت بـ ___، والذي أحتاجه هو ___». قلها غدًا بهدوء. الغضب يُسمَع حين يصل على هيئة طلب."],
+    ["فرّغه جسديًا","خمس عشرة دقيقة مشي سريع أو صعود درج أو عمل بدني. الغضب طاقة في الجسد ولا بد لها من مخرج."]]}},
+  practices:[["تأريض ٥-٤-٣-٢-١","سمِّ خمسة أشياء تراها، وأربعة تلمسها، وثلاثة تسمعها، واثنين تشمّهما، وواحدًا تتذوّقه. يخرجك من دوّامة رأسك إلى الغرفة.",["sad","angry"]],
+             ["زفير أطول","شهيق أربع عدّات وزفير ثماني، لمدة دقيقتين. الزفير الطويل أسرع مفتاح في جسدك للهدوء.",["angry","sad"]],
+             ["ماء بارد","اغسل وجهك ومعصميك بماء بارد ثلاثين ثانية. يخفض النبض بسرعة عند اشتداد الغضب.",["angry"]],
+             ["امشِ قليلًا","عشر دقائق مشي والهاتف في جيبك. الحركة تصرّف ما لا يصل إليه الكلام.",["sad","angry"]],
+             ["اكتبها ولا ترسلها","اكتب كل ما بداخلك في ملاحظة دون تنقيح. اقرأها صباح الغد ثم قرّر.",["angry"]],
+             ["شخص واحد","قل لشخص تثق به جملة صادقة واحدة عن حالك. حملها وحدك هو ما يجعلها ثقيلة.",["sad"]]]}
 };
 
 let L=T.en, model=null, stream=null, lastEmotion=null, turns=[], sampleFn=null, busy=false;
@@ -283,6 +379,7 @@ function applyLang(){
   if(!stream) $("stagemsg").textContent=L.stage;
   $("start").textContent=stream?L.stop:L.start;
   $("read").textContent=L.read;
+  $("reset").textContent=L.reset;
   $("t-reading").textContent=L.reading;
   $("verdictNote").textContent=L.note;
   $("t-talk").textContent=L.talk; $("t-calm").textContent=L.calm;
@@ -294,14 +391,41 @@ function applyLang(){
   else renderVerdict(lastScores);
   renderPractices();
 }
+$("reset").onclick=()=>{
+  lastEmotion=null; lastScores=[0,0,0]; turns=[]; fbStep=0; sampleFn=null;
+  smooth=null; stable=0; stableKey=null; userMsgs=0; interest=null; booksState=null;
+  $("booksCard").classList.add("hidden");
+  $("verdict").textContent=L.notread; $("conf").classList.add("hidden");
+  $("bars").innerHTML=""; $("chat").innerHTML=""; $("quick").innerHTML="";
+  $("input").value=""; $("talkCard").classList.add("hidden");
+  renderPractices();
+  renderSensory();
+  window.scrollTo({top:0,behavior:"smooth"});
+};
 $("lang").onclick=()=>{L=(L===T.en)?T.ar:T.en;applyLang();};
 
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 function renderPractices(){
   const wrap=$("practices");
-  wrap.innerHTML='<p class="eyebrow" style="margin-bottom:12px">'+L.practicesTitle+'</p>'+
-    L.practices.map(p=>'<div class="practice"><h3></h3><p></p></div>').join("");
-  const nodes=wrap.querySelectorAll(".practice");
-  L.practices.forEach((p,i)=>{nodes[i].querySelector("h3").textContent=p[0];nodes[i].querySelector("p").textContent=p[1];});
+  const emo=(lastEmotion==="sad"||lastEmotion==="angry")?lastEmotion:null;
+  let html="";
+  if(emo){
+    const th=L.therapy[emo];
+    html+='<div class="rec"><p class="eyebrow" style="margin:0">'+esc(L.recTitle)+'</p>'+
+          '<h3>'+esc(th.title)+'</h3><p class="recwhy">'+esc(L.recFor[emo])+'</p><ol class="steps">'+
+          th.steps.map(s=>'<li><b>'+esc(s[0])+'</b><span>'+esc(s[1])+'</span></li>').join("")+
+          '</ol></div>';
+  }
+  const list=L.practices.slice().sort((a,b)=>{
+    const A=emo&&a[2].includes(emo)?0:1, B=emo&&b[2].includes(emo)?0:1; return A-B;});
+  html+='<p class="eyebrow" style="margin-bottom:12px">'+esc(emo?L.allTitle:L.practicesTitle)+'</p>'+
+    list.map(p=>{
+      const hit=emo&&p[2].includes(emo);
+      return '<div class="practice"><h3>'+esc(p[0])+
+        (hit?'<span class="tag">'+esc(L.forTag[emo])+'</span>':'')+
+        '</h3><p>'+esc(p[1])+'</p></div>';
+    }).join("");
+  wrap.innerHTML=html;
 }
 
 /* ---------- model ---------- */
@@ -326,10 +450,12 @@ $("start").onclick=async()=>{
     stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:640}},audio:false});
     video.srcObject=stream; video.classList.remove("hidden"); $("stagemsg").classList.add("hidden");
     $("start").textContent=L.stop; $("read").disabled=false;
+    video.onloadeddata=()=>startLive(); setTimeout(startLive,700);
   }catch(e){ $("stagemsg").textContent=L.denied; }
   $("start").disabled=false;
 };
 function stopCam(){
+  stopLive();
   stream.getTracks().forEach(t=>t.stop()); stream=null;
   video.classList.add("hidden"); video.srcObject=null;
   $("stagemsg").classList.remove("hidden"); $("stagemsg").textContent=L.stage;
@@ -337,23 +463,46 @@ function stopCam(){
 }
 
 /* ---------- prediction ---------- */
-let lastScores=[0,0,0];
-$("read").onclick=async()=>{
-  const btn=$("read"); btn.disabled=true; $("scanline").classList.remove("hidden");
-  const r=await modelReady;
-  if(r==="err"||!model){$("verdict").textContent="—";$("scanline").classList.add("hidden");btn.disabled=false;return;}
-  const vw=video.videoWidth, vh=video.videoHeight, side=Math.min(vw,vh);
+let lastScores=[0,0,0], smooth=null, stable=0, stableKey=null, busyPred=false, live=true, rafId=null, lastT=0;
+function grabFrame(){
+  const vw=video.videoWidth, vh=video.videoHeight;
+  if(!vw||!vh) return false;
+  const side=Math.min(vw,vh);
   ctx.save(); ctx.translate(224,0); ctx.scale(-1,1);
   ctx.drawImage(video,(vw-side)/2,(vh-side)/2,side,side,0,0,224,224); ctx.restore();
-  await new Promise(r=>setTimeout(r,180));
+  return true;
+}
+async function predictNow(force){
+  const r=await modelReady;
+  if(r==="err"||!model||!stream) return;
+  if(!grabFrame()) return;
   const scores=tf.tidy(()=>{
-    const t=tf.browser.fromPixels(snap).toFloat().div(127.5).sub(1).expandDims(0);
-    return Array.from(model.predict(t).dataSync());
+    const x=tf.browser.fromPixels(snap).toFloat().div(127.5).sub(1).expandDims(0);
+    return Array.from(model.predict(x).dataSync());
   });
-  lastScores=scores; $("scanline").classList.add("hidden"); btn.disabled=false;
-  renderVerdict(scores);
-  const top=scores.indexOf(Math.max(...scores));
-  onEmotion(KEYS[top]);
+  smooth = smooth ? smooth.map((v,i)=>v*0.45+scores[i]*0.55) : scores;
+  lastScores=smooth.slice();
+  renderVerdict(lastScores);
+  const top=lastScores.indexOf(Math.max(...lastScores)), key=KEYS[top];
+  if(key===stableKey) stable++; else {stableKey=key; stable=1;}
+  if((force||stable>=3) && lastScores[top]>0.5 && key!==lastEmotion){
+    onEmotion(key); renderPractices(); renderSensory();
+  }
+}
+function loop(ts){
+  if(!live||!stream){rafId=null;return;}
+  rafId=requestAnimationFrame(loop);
+  if(ts-lastT<200||busyPred) return;
+  lastT=ts; busyPred=true;
+  predictNow(false).catch(()=>{}).finally(()=>{busyPred=false;});
+}
+function startLive(){ if(!stream||rafId) return; live=true; $("livepill").classList.remove("hidden"); rafId=requestAnimationFrame(loop); }
+function stopLive(){ live=false; if(rafId) cancelAnimationFrame(rafId); rafId=null; $("livepill").classList.add("hidden"); }
+$("read").onclick=async()=>{
+  smooth=null; stable=0; stableKey=null; lastEmotion=null;
+  $("read").disabled=true;
+  await predictNow(true);
+  $("read").disabled=false;
 };
 function renderVerdict(scores){
   const top=scores.indexOf(Math.max(...scores));
@@ -361,11 +510,12 @@ function renderVerdict(scores){
   $("verdict").textContent=L.names[key];
   const chip=$("conf"); chip.classList.remove("hidden");
   chip.textContent=Math.round(scores[top]*100)+"%";
-  chip.className="chip"+((key==="sad"||key==="angry")?" warn":"");
+  const warn=(key==="sad"||key==="angry");
+  chip.className="chip"+(warn?" warn":"");
   $("bars").innerHTML=KEYS.map((k,i)=>
-    '<div class="bar'+(i===top?' lead':'')+'"><span>'+L.names[k]+'</span><span class="pct">'+
+    '<div class="bar'+(i===top?(warn?' lead warn':' lead'):'')+'"><span>'+L.names[k]+'</span><span class="pct">'+
     (scores[i]*100).toFixed(1)+'%</span><span class="track"><span class="fill" style="width:'+
-    (scores[i]*100).toFixed(1)+'%"></span></span></div>').join("");
+    Math.max(2,scores[i]*100).toFixed(1)+'%"></span></span></div>').join("");
 }
 
 /* ---------- conversation ---------- */
@@ -377,10 +527,11 @@ function onEmotion(key){
   if(key==="happy"){
     if(lastEmotion!=="happy"){ $("talkCard").classList.remove("hidden"); $("chat").innerHTML=""; turns=[];
       bubble(L.happyMsg,"bot"); $("quick").innerHTML=""; }
-    lastEmotion="happy"; return;
+    lastEmotion="happy"; showBooks("happy"); return;
   }
   if(lastEmotion===key) return;
-  lastEmotion=key; fbStep=0;
+  lastEmotion=key; fbStep=0; userMsgs=0;
+  $("booksCard").classList.add("hidden"); booksState=null;
   $("talkCard").classList.remove("hidden"); $("chat").innerHTML=""; turns=[];
   bubble(L.openers[key],"bot");
   $("quick").innerHTML="";
@@ -402,11 +553,11 @@ const RULES=(emotion,lang)=>
 "If they mention self-harm, harming someone else, or being unsafe, drop everything else: tell them plainly to call 999 in the UAE "+
 "or reach a person they trust now, and stay warm and brief.";
 
-let fbStep=0;
+let fbStep=0, userMsgs=0;
 async function send(){
   const box=$("input"); const text=box.value.trim();
   if(!text||busy) return;
-  box.value=""; $("quick").innerHTML=""; bubble(text,"me");
+  box.value=""; $("quick").innerHTML=""; bubble(text,"me"); userMsgs++;
   const emo=lastEmotion||"sad";
   busy=true; $("send").disabled=true;
   const thinking=bubble(L.thinking,"bot");
@@ -422,6 +573,10 @@ async function send(){
     thinking.textContent=fallbackReply(emo);
   }
   busy=false; $("send").disabled=false;
+  if(userMsgs>=3 && (lastEmotion==="sad"||lastEmotion==="angry")){
+    showBooks(lastEmotion);
+    $("booksCard").scrollIntoView({behavior:"smooth",block:"nearest"});
+  }
 }
 function fallbackReply(emo){
   const q=L.fb[emo];
@@ -432,6 +587,110 @@ function fallbackReply(emo){
 }
 $("send").onclick=send;
 $("input").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}});
+
+/* ---------- books ---------- */
+/* [en title, author, ar title, en why, ar why, publicDomain] */
+const BOOKS={
+ sad:[["Feeling Good","David D. Burns","الشعور الجيد","The cognitive-therapy workbook: catch the thought before it becomes the mood.","كتاب العلاج المعرفي العملي: أمسك الفكرة قبل أن تصير مزاجًا.",0],
+      ["Man's Search for Meaning","Viktor E. Frankl","الإنسان يبحث عن المعنى","Written from a concentration camp: meaning is what survives when comfort does not.","كُتب من معسكر اعتقال: المعنى هو ما يبقى حين لا يبقى شيء.",0],
+      ["Reasons to Stay Alive","Matt Haig","أسباب للبقاء حيًّا","Short, honest chapters by someone who came out the other side of a very low year.","فصول قصيرة صادقة كتبها من عبر سنة شديدة القسوة وخرج منها.",0],
+      ["Don't Be Sad","Aaidh ibn Abdullah al-Qarni","لا تحزن","The Arabic bestseller on contentment — read a page a night, not the whole thing.","الكتاب العربي الأشهر في الرضا — اقرأ صفحة كل ليلة لا الكتاب كله.",0],
+      ["The Prophet","Kahlil Gibran","النبي","Gibran on sorrow and joy carved from the same wood. Free — it is in the public domain.","جبران عن الحزن والفرح المنحوتين من الخشب ذاته. مجاني — في الملكية العامة.",1]],
+ angry:[["Anger: Wisdom for Cooling the Flames","Thich Nhat Hanh","الغضب: حكمة لتهدئة النيران","Treats anger as something to care for rather than win against.","يتعامل مع الغضب كشيء يُعتنى به لا كخصم يُهزم.",0],
+      ["The Dance of Anger","Harriet Lerner","رقصة الغضب","On turning anger into a clear request instead of a repeated fight.","عن تحويل الغضب إلى طلب واضح بدل شجار يتكرر.",0],
+      ["Meditations","Marcus Aurelius","التأملات","A Roman emperor's private notes on not being ruled by temper. Free to read.","مذكرات إمبراطور روماني عن ألا يحكمه غضبه. متاح مجانًا.",1],
+      ["Nonviolent Communication","Marshall B. Rosenberg","التواصل اللاعنفي","The exact sentences to use when you are angry and still want to be heard.","الجُمل التي تقولها حين تغضب وتريد أن تُسمَع رغم ذلك.",0]],
+ growth:[["Atomic Habits","James Clear","العادات الذرية","Small repeatable changes, and why the system beats the goal.","تغييرات صغيرة متكررة، ولماذا يتفوق النظام على الهدف.",0],
+      ["Deep Work","Cal Newport","العمل العميق","Concentration as a skill you train, in a world built to interrupt it.","التركيز مهارة تُدرَّب، في عالم مصمَّم لمقاطعتها.",0],
+      ["Mindset","Carol S. Dweck","العقلية","Why believing ability can grow changes what you attempt.","لماذا يغيّر إيمانك بقابلية القدرة للنمو ما تجرؤ على محاولته.",0]],
+ money:[["The Psychology of Money","Morgan Housel","سيكولوجية المال","Money decisions are behaviour, not arithmetic.","قرارات المال سلوك لا حساب.",0],
+      ["Zero to One","Peter Thiel","من الصفر إلى الواحد","On building something new rather than copying what works.","عن بناء شيء جديد بدل نسخ ما ينجح.",0],
+      ["Shoe Dog","Phil Knight","مذكرات مؤسس نايكي","The unglamorous decade before Nike looked inevitable.","العقد غير اللامع قبل أن تبدو نايكي أمرًا محتومًا.",0]],
+ science:[["Cosmos","Carl Sagan","الكون","Still the warmest invitation into astronomy ever written.","أدفأ دعوة كُتبت يومًا لدخول علم الفلك.",0],
+      ["Sapiens","Yuval Noah Harari","العاقل: تاريخ مختصر للنوع البشري","Seventy thousand years of us, told as one argument.","سبعون ألف سنة من تاريخنا في حجّة واحدة متصلة.",0],
+      ["Thinking, Fast and Slow","Daniel Kahneman","التفكير السريع والبطيء","The two systems behind almost every judgement you make.","النظامان اللذان يقفان خلف كل حكم تصدره تقريبًا.",0]],
+ history:[["My Vision","Mohammed bin Rashid Al Maktoum","رؤيتي","The thinking behind how Dubai was built, from the person who built it.","التفكير الذي بُنيت به دبي، من الشخص الذي بناها.",0],
+      ["Flashes of Thought","Mohammed bin Rashid Al Maktoum","ومضات من فكر","Short pieces on leadership, work and the country.","مقالات قصيرة عن القيادة والعمل والوطن.",0],
+      ["The Arabs: A History","Eugene Rogan","العرب: تاريخ","Five centuries of the region in one readable volume.","خمسة قرون من تاريخ المنطقة في مجلد واحد سلس.",0]],
+ fiction:[["The Alchemist","Paulo Coelho","الخيميائي","A short journey story people re-read at turning points.","حكاية رحلة قصيرة يعيد الناس قراءتها عند المفترقات.",0],
+      ["Cities of Salt","Abdulrahman Munif","مدن الملح","The Gulf before and after oil, as a novel.","الخليج قبل النفط وبعده، في صورة رواية.",0],
+      ["One Hundred Years of Solitude","Gabriel Garcia Marquez","مائة عام من العزلة","The novel most often named when people say a book changed them.","الرواية الأكثر ذكرًا حين يقول الناس إن كتابًا غيّرهم.",0]],
+ faith:[["The Prophet","Kahlil Gibran","النبي","Twenty-six short meditations on work, love, grief and freedom. Free.","ست وعشرون تأملًا قصيرًا في العمل والحب والحزن والحرية. مجاني.",1],
+      ["The Revival of the Religious Sciences","Abu Hamid al-Ghazali","إحياء علوم الدين","Al-Ghazali on the inner life — read a single chapter, not the set.","الغزالي عن الحياة الباطنة — اقرأ فصلًا واحدًا لا المجموعة.",1],
+      ["Meditations","Marcus Aurelius","التأملات","Daily practice for keeping your character steady. Free.","تمرين يومي على ثبات الخُلق. مجاني.",1]],
+ sport:[["Can't Hurt Me","David Goggins","لا يمكنك أن تؤذيني","On the gap between what your head says is the limit and what is.","عن الفرق بين ما يسميه عقلك حدًّا وبين الحد الحقيقي.",0],
+      ["Endure","Alex Hutchinson","التحمل","The science of why endurance is decided in the brain.","علم يشرح لماذا يُحسم التحمل في الدماغ.",0],
+      ["The Champion's Mind","Jim Afremow","عقل البطل","The mental routines athletes use before it matters.","الروتين الذهني الذي يستخدمه الرياضيون قبل اللحظة الحاسمة.",0]]};
+const INTERESTS=["growth","money","science","history","fiction","faith","sport"];
+function bookLinks(b){
+  const ar=(L.lang==="ar");
+  const q=encodeURIComponent(ar?b[2]:b[0]+" "+b[1]);
+  const out=['<a class="blink" target="_blank" rel="noopener" href="https://www.google.com/search?tbm=bks&q='+q+'">'+esc(L.findBook)+'</a>'];
+  if(b[5]) out.unshift('<a class="blink free" target="_blank" rel="noopener" href="https://www.gutenberg.org/ebooks/search/?query='+
+    encodeURIComponent(b[0]+" "+b[1])+'">'+esc(L.freeBook)+'</a>');
+  else out.push('<a class="blink" target="_blank" rel="noopener" href="https://openlibrary.org/search?q='+
+    encodeURIComponent(b[0]+" "+b[1])+'">'+esc(L.borrow)+'</a>');
+  return out.join("");
+}
+function bookRow(b){
+  const ar=(L.lang==="ar");
+  return '<div class="book"><div class="spine"></div><div><h3>'+esc(ar?b[2]:b[0])+'</h3>'+
+    '<p class="by">'+esc(b[1])+(ar?' — '+esc(b[0]):'')+'</p><p>'+esc(ar?b[4]:b[3])+'</p>'+
+    '<div class="links">'+bookLinks(b)+'</div></div></div>';
+}
+let interest=null, booksState=null;
+function showBooks(state){
+  booksState=state;
+  const card=$("booksCard"); card.classList.remove("hidden");
+  $("t-books").textContent=L.booksEyebrow;
+  $("hindawi").textContent=L.hindawi;
+  if(state==="happy"){
+    $("booksTitle").textContent=L.booksHappy;
+    $("booksNote").textContent=L.booksHappyNote;
+    $("interests").innerHTML=INTERESTS.map(k=>
+      '<button type="button" data-k="'+k+'" class="'+(interest===k?"on":"")+'">'+esc(L.interests[k])+'</button>').join("");
+    $("interests").querySelectorAll("button").forEach(b=>b.onclick=()=>{interest=b.dataset.k;showBooks("happy");});
+    $("booklist").innerHTML=interest?BOOKS[interest].map(bookRow).join(""):"";
+  }else{
+    const key=(state==="angry")?"angry":"sad";
+    $("booksTitle").textContent=L.booksFor[key];
+    $("booksNote").textContent=L.booksNote;
+    $("interests").innerHTML="";
+    $("booklist").innerHTML=BOOKS[key].map(bookRow).join("");
+  }
+}
+
+
+/* ---------- sensory kit ---------- */
+/* [en name, ar name, sense, en how, ar how, tags] */
+const SENSORY=[
+ ["Worry beads (misbaha)","مسبحة / سبحة","touch","Thirty-three beads through the fingers at the pace of your breath. Restless hands settle before the mind does.","ثلاث وثلاثون خرزة تمرّ بين أصابعك على إيقاع نفَسك. تهدأ اليدان قبل أن يهدأ العقل.",["angry","sad"]],
+ ["Weighted blanket, 4–5 kg","بطانية ثقيلة ٤–٥ كجم","touch","Deep even pressure across the body tells the nervous system it is safe. Best in the last hour before sleep.","ضغط عميق متساوٍ على الجسد يخبر الجهاز العصبي أنه في أمان. أفضل استخدام لها في الساعة الأخيرة قبل النوم.",["sad"]],
+ ["Cold pack for the back of the neck","كمّادة باردة للرقبة","cold","Sixty seconds against the neck or wrists pulls a spike of anger down fast. Keep one in the freezer.","ستون ثانية على الرقبة أو المعصمين تُنزل ذروة الغضب سريعًا. احتفظ بواحدة في الفريزر.",["angry"]],
+ ["Bakhoor, oud or lavender oil","بخور أو عود أو زيت لافندر","smell","Scent reaches the emotional brain before language does. Light it as a signal that the working part of the day is over.","تصل الرائحة إلى الدماغ العاطفي قبل اللغة. أشعله كإشارة أن الجزء الشاق من اليوم انتهى.",["sad","angry"]],
+ ["Therapy putty or a stress ball","معجون علاجي أو كرة ضغط","touch","Ten slow hard squeezes, then let the hand go loose. Anger is energy in the muscles and it needs somewhere to go.","عشر ضغطات بطيئة قوية ثم أرخِ يدك تمامًا. الغضب طاقة في العضلات وتحتاج مخرجًا.",["angry"]],
+ ["Noise-cancelling headphones","سماعات عازلة للضوضاء","sound","Ten minutes of silence or low ambient sound. Half of what feels like anger is sensory overload.","عشر دقائق من الصمت أو صوت خافت. نصف ما نظنه غضبًا هو إرهاق حسّي.",["angry","sad"]],
+ ["Worry stone with a groove","حجر تهدئة محزَّز","touch","A smooth pocket stone with a thumb groove. Something to do with your hands in a meeting or a queue.","حجر أملس بحزّ للإبهام يوضع في الجيب. شيء تفعله بيدك في اجتماع أو طابور.",["sad","angry"]],
+ ["Warm drink in a heavy mug","مشروب دافئ في كوب ثقيل","cold","Karak, chamomile or plain warm water. Warmth in both hands is one of the oldest calming signals there is.","كرك أو بابونج أو ماء دافئ. الدفء بين الكفّين من أقدم إشارات الطمأنينة.",["sad","angry"]],
+ ["Peppermint gum","علكة نعناع","taste","Chewing lowers stress hormones and gives a clenched jaw something else to do.","المضغ يخفض هرمونات التوتر ويشغل الفك المشدود بشيء آخر.",["angry"]],
+ ["A dimmable warm lamp","مصباح دافئ قابل للخفت","sight","Drop the light level an hour before bed. Lower light lowers arousal, and low mood is worse after a bad night.","اخفض الإضاءة قبل النوم بساعة. الضوء المنخفض يخفض التوتر، والمزاج المنخفض يسوء بعد ليلة سيئة.",["sad"]]];
+function renderSensory(){
+  const ar=(L.lang==="ar"), emo=(lastEmotion==="sad"||lastEmotion==="angry")?lastEmotion:null;
+  $("t-sensory").textContent=L.sensoryEyebrow;
+  $("sensoryTitle").textContent=L.sensoryTitle;
+  $("sensoryNote").textContent=L.sensoryNote;
+  const list=SENSORY.slice().sort((a,b)=>{
+    const A=emo&&a[5].includes(emo)?0:1,B=emo&&b[5].includes(emo)?0:1;return A-B;});
+  $("sensorylist").innerHTML=list.map(s=>{
+    const hit=emo&&s[5].includes(emo);
+    return '<div class="book"><div class="spine"></div><div><h3>'+esc(ar?s[1]:s[0])+
+      '<span class="tag">'+esc(L.senses[s[2]])+'</span>'+
+      (hit?'<span class="tag">'+esc(L.pickedFor)+'</span>':'')+'</h3>'+
+      '<p>'+esc(ar?s[4]:s[3])+'</p><div class="links">'+
+      '<a class="blink" target="_blank" rel="noopener" href="https://www.google.com/search?tbm=shop&q='+
+      encodeURIComponent(ar?s[1]:s[0])+'">'+esc(L.findIt)+'</a></div></div></div>';
+  }).join("");
+}
 
 /* ---------- breathing ---------- */
 let running=false,timer=null;
