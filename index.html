@@ -10,6 +10,7 @@
 <link rel="icon" href="icons/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-180.png">
+<style>[hidden]{display:none!important}</style>
 </head>
 <body style="margin:0">
 <title>Sakina Check-In</title>
@@ -45,7 +46,8 @@ body{margin:0;background:var(--sand);color:var(--ink);
    repeating-linear-gradient(135deg,var(--teal) 0 3px,transparent 3px 9px);
   opacity:.85}
 .wrap{max-width:600px;margin:0 auto;padding:20px 18px 56px;display:flex;flex-direction:column;gap:18px}
-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:6px}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:6px;flex-wrap:wrap}
+.brand{flex:1 1 150px}
 .brand{display:flex;align-items:center;gap:11px;min-width:0}
 .mark{width:38px;height:38px;flex:none;border-radius:12px;background:var(--teal);display:grid;place-items:center}
 .mark svg{width:22px;height:22px}
@@ -172,6 +174,46 @@ a.blink.free:hover{color:#fff;filter:brightness(1.07)}
 .chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
 .chips span{font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;
   border:1px solid var(--line);color:var(--ink-soft)}
+/* --- verification gateway --- */
+#gate[hidden]{display:none!important}
+.facestage{position:relative;aspect-ratio:1/1;margin:14px auto 0;width:100%;max-width:260px;
+  border-radius:22px;overflow:hidden;background:var(--sand-2);display:grid;place-items:center}
+.facestage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+.facehint{position:absolute;inset:auto 0 0 0;background:rgba(10,30,28,.62);color:#fff;font-size:11.5px;
+  padding:7px 10px;text-align:center;backdrop-filter:blur(6px)}
+#gate{position:fixed;inset:0;z-index:90;background:var(--sand);overflow-y:auto;
+  display:flex;align-items:flex-start;justify-content:center;padding:26px 18px 60px}
+#gate .panel{width:100%;max-width:460px;display:flex;flex-direction:column;gap:16px}
+.gatehead{display:flex;align-items:center;gap:12px;margin-top:8px}
+.gatehead h2{margin:0;font-family:Zain,sans-serif;font-size:25px;line-height:1.15}
+.gatehead p{margin:2px 0 0;font-size:13px;color:var(--ink-soft)}
+.field{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.field label{font-size:12.5px;font-weight:600;color:var(--ink-soft)}
+.field input{font:inherit;font-size:16px;padding:12px 14px;border-radius:12px;
+  border:1px solid var(--line);background:var(--sand);color:var(--ink);width:100%}
+.field input:focus{border-color:var(--teal);outline:none;box-shadow:0 0 0 3px var(--teal-soft)}
+.pinrow{letter-spacing:.5em;font-variant-numeric:tabular-nums}
+.err{color:var(--clay);font-size:13px;font-weight:600;margin-top:10px;min-height:18px}
+.consent{font-size:14px;line-height:1.7}
+.consent ul{padding-inline-start:20px;margin:8px 0 0;display:flex;flex-direction:column;gap:6px}
+.consent li::marker{color:var(--teal)}
+.agree{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:14px;cursor:pointer}
+.agree input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:var(--teal)}
+.stack{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.stack .btn{width:100%}
+.logrow{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;align-items:center;
+  border-top:1px solid var(--line);padding:9px 0;font-size:13px}
+.logrow:first-child{border-top:0}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--teal)}
+.dot.bad{background:var(--clay)}
+.logrow time{font-size:11.5px;color:var(--ink-soft);font-variant-numeric:tabular-nums;white-space:nowrap}
+.danger{background:var(--clay)!important;border-color:transparent!important;color:#fff!important}
+.totpbox{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.totpbox .box{background:#fff;padding:10px;border-radius:14px;border:1px solid var(--line);line-height:0}
+.totpbox canvas{width:150px;height:150px;display:block}
+.secret{font-family:ui-monospace,Menlo,monospace;font-size:13px;word-break:break-all;
+  background:var(--sand);border:1px dashed var(--line);border-radius:10px;padding:9px 11px;margin-top:8px}
+.note{font-size:12.5px;color:var(--ink-soft);margin-top:10px;line-height:1.6}
 .qr{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
 .qr .box{background:#fff;padding:10px;border-radius:14px;border:1px solid var(--line);line-height:0}
 .qr .box canvas,.qr .box svg,.qr .box img{width:132px;height:132px;display:block}
@@ -182,6 +224,7 @@ footer b{color:var(--ink)}
 </style>
 
 <div class="sadu"></div>
+<div id="gate" hidden><div class="panel" id="gatePanel"></div></div>
 <div class="wrap">
   <header>
     <div class="brand">
@@ -196,6 +239,7 @@ footer b{color:var(--ink)}
       </div>
     </div>
     <div style="display:flex;gap:8px;flex:none">
+        <button class="langbtn" id="profile" type="button">Account</button>
         <button class="langbtn" id="about" type="button">About</button>
         <button class="langbtn" id="lang" type="button">العربية</button>
       </div>
@@ -306,6 +350,16 @@ footer b{color:var(--ink)}
   </div>
 
   <section class="card hidden" id="aboutView"></section>
+
+  <div id="profileView" class="hidden">
+    <section class="card" id="secCard">
+      <p class="eyebrow" id="t-sec">Security and your data</p>
+      <div id="profHead"></div>
+      <h2 id="secTitle"></h2>
+      <p id="secNote" style="color:var(--ink-soft);font-size:14px"></p>
+      <div id="secBody"></div>
+    </section>
+  </div>
 
   <footer id="t-foot">
     <b>Sakina is a wellbeing companion, not a therapist or a diagnosis.</b><br>
@@ -539,8 +593,11 @@ async function loadModel(){
 const modelReady=loadModel().catch(e=>{console.error(e);return "err";});
 
 /* ---------- camera ---------- */
-$("start").onclick=async()=>{
+$("start").onclick=()=>{
   if(stream){stopCam();return;}
+  withCameraConsent(openCam);
+};
+async function openCam(){
   $("start").disabled=true;
   try{
     stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:640}},audio:false});
@@ -549,7 +606,7 @@ $("start").onclick=async()=>{
     startLive();
   }catch(e){ $("stagemsg").textContent=L.denied; }
   $("start").disabled=false;
-};
+}
 function stopCam(){
   stopLive();
   stream.getTracks().forEach(t=>t.stop()); stream=null;
@@ -815,6 +872,690 @@ function fallbackReply(emo){
 $("send").onclick=send;
 $("input").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}});
 
+const AUTH={
+ en:{footer:"Everything here stays on this device. No account on any server, nothing uploaded.",
+  setupTitle:"Create your Sakina account",setupSub:"Step 1 of 3 — your details",
+  setupIntro:"Sakina keeps your account on this phone only. Your email is the name on the account; the PIN is never stored anywhere — it is turned into a one-way verifier and unlocks your data.",
+  email:"Email address",name:"Your name",pin:"PIN (6 digits or more)",pin2:"Confirm PIN",
+  agree:"I have read the privacy notice and agree that Sakina may keep my email, a PIN verifier and my in-app data on this device only.",
+  next:"Continue",skip:"Skip this step",finish:"Finish and open Sakina",
+  faceTitle:"Face sign-in",faceSub:"Step 2 of 3 — optional",
+  faceIntro:"Add a photo of your face and you can sign in by looking at the camera instead of typing the PIN. This is a convenience unlock on your own phone, not bank-grade identification — your PIN always works and is the stronger of the two.",
+  bioPoints:[
+   "What is created: a numeric face signature (a list of numbers from the model already embedded in this page). The photo itself is never kept.",
+   "Where it is stored: encrypted on this device only. It is never uploaded, shared or transferred outside the UAE — there is no server to send it to.",
+   "Legal basis: your explicit consent. A face signature is biometric data, and therefore sensitive personal data under UAE Federal Decree-Law No. 45 of 2021.",
+   "Retention: until you delete it. The Security section has a Delete face signature button that removes it permanently and irreversibly.",
+   "This step is optional and refusing it changes nothing else in the app."],
+  bioAgree:"I have read the above and freely give my explicit consent for a face signature to be created and stored on this device.",
+  useCamera:"Take a photo",uploadPhoto:"Upload a photo",retake:"Take it again",
+  faceHint:"Fill the frame with your face, in even light, then hold still.",
+  faceSaved:"Face signature saved.",faceWorking:"Reading your face…",
+  totpTitle:"Authenticator app",totpSub:"Step 3 of 3 — optional",
+  totpIntro:"Scan this with Google Authenticator, Microsoft Authenticator or any TOTP app, then type the six digits it shows to confirm the pairing.",
+  welcome:"Welcome back",unlockSub:"Choose how you want to sign in",unlock:"Unlock",
+  usePin:"PIN",usePasskey:"Passkey / device biometrics",useTotp:"Authenticator code",useFace:"Face sign-in",
+  faceUnlockTitle:"Face sign-in",faceUnlockSub:"Look at the camera",faceGo:"Sign in with my face",
+  passkeyOk:"Passkey verified — enter your PIN to open your data.",
+  code:"6-digit code",pinToOpen:"PIN",verify:"Verify",back:"Back",
+  errEmail:"Please enter a valid email address.",
+  errPin:"The PIN must be at least six characters.",errMatch:"The two PINs do not match.",
+  errWrong:"Wrong PIN. {n} attempts before a pause.",
+  errCode:"That code is not valid right now. Check your authenticator and try again.",
+  errPasskey:"The passkey could not be verified on this device.",
+  errFace:"That is not a close enough match ({s}%). Try again in better light, or use your PIN.",
+  errFaceCam:"The camera could not be opened. Allow camera access, or upload a photo instead.",
+  errNoModel:"The face model is still loading. Give it a moment and try again.",
+  lockedFor:"Too many attempts. Try again in {s} seconds.",
+  mustAgree:"Please tick the box to give your consent.",
+  consentTitle:"Consent for camera use",consentSub:"Required before the camera opens",
+  consentBody:"Sakina wants to open the camera to read your facial expression. Please read this before you agree:",
+  consentPoints:[
+   "Purpose: to classify your facial expression as sadness, happiness or anger, so the app can respond to how you feel.",
+   "What is processed: video frames from the front camera, in the memory of this browser only.",
+   "What is stored: nothing. No photo and no video is saved, sent or shared, and each frame is discarded immediately after it is classified.",
+   "Where: entirely on this device. Nothing is transmitted to any server, and no data leaves the UAE or crosses any border.",
+   "Legal basis: your explicit consent. Facial data is sensitive personal data under UAE Federal Decree-Law No. 45 of 2021 (PDPL).",
+   "Your rights: withdraw this consent at any moment in the Security section, and erase everything Sakina holds with one button. Withdrawal is as easy as giving consent and costs you nothing.",
+   "Retention: this consent record (a date and a version number) stays on this device until you withdraw it or erase your data."],
+  consentAgree:"I have read the above and I freely give my explicit consent to camera use for this purpose.",
+  consentYes:"I agree — open the camera",consentNo:"Not now",
+  noticeTitle:"Privacy notice",noticeSub:"How Sakina handles your data",
+  notice:[
+   "Controller: this copy of Sakina, running on your own device. There is no server and no company holding your data.",
+   "Stored on this device: your email and name, a PBKDF2-SHA-256 verifier of your PIN with a random salt (310,000 rounds), an encrypted master key, an optional encrypted face signature, an optional encrypted authenticator secret, an optional passkey identifier, your consent records, and a log of the last 40 sign-in attempts. Your PIN itself is never stored.",
+   "Never stored: photos, video, location coordinates, or anything you type into the conversation.",
+   "Strength of each sign-in method: the PIN is the only one protected by a key derived from a secret you know. Face and authenticator sign-in unwrap a key held on this device, so treat them as convenience unlocks for your own phone and use the PIN on a shared device.",
+   "Camera: frames are classified in memory by a model embedded in the page and discarded immediately. The nearest-centres feature reads your coordinates in the browser to sort a built-in list, and neither keeps nor sends them.",
+   "Conversation: when you type to Sakina and the assistant is available, your message is sent to Claude to compose a reply. Do not type anything you would not want processed by a service; the app falls back to a written analysis without it.",
+   "Retention and erasure: everything above is erased permanently by the Erase button in the Security section, or by clearing this site's data in your browser.",
+   "Rights under UAE PDPL: access, rectification, erasure, restriction and withdrawal of consent — all exercised directly in this app, because you hold the only copy.",
+   "Sakina is a wellbeing companion, not a medical device, and it does not diagnose."],
+  secEyebrow:"Security and your data",secTitle:"Your lock, your log, your erase button",
+  secNote:"Sakina holds no account of you anywhere but this device. Everything below acts on this device only.",
+  methods:"Sign-in methods",
+  methodsNote:"Your PIN always works. Face, passkey and authenticator are alternatives you can add or remove at any time.",
+  passkeyAdd:"Add passkey",passkeyOn:"Passkey on — remove",totpAdd:"Add authenticator",totpOn:"Authenticator on — remove",
+  faceAdd:"Add face sign-in",faceOn:"Face sign-in on — delete signature",lockNow:"Lock now",
+  faceDeleted:"Face signature permanently deleted.",
+  totpScan:"Scan this with Google Authenticator, Microsoft Authenticator or any TOTP app, then enter the six digits it shows.",
+  consentState:"Camera consent",consentGiven:"Given on {d}. The camera may be used for expression reading until you withdraw it.",
+  consentNone:"Not given. The camera will ask before it opens.",withdraw:"Withdraw consent",
+  logTitle:"Sign-in attempts",
+  logNote:"The last 40 attempts, kept on this device: method, result, time and platform. No IP address, no location, no device fingerprint.",
+  ok:"success",failed:"failed",logEmpty:"No attempts recorded yet.",clearLog:"Clear the log",
+  methodName:{pin:"PIN",passkey:"Passkey",totp:"Authenticator",face:"Face",setup:"Account created",consent:"Consent",lock:"Locked"},
+  eraseTitle:"Erase everything",
+  eraseNote:"Permanently and irreversibly deletes your email, PIN verifier, master key, face signature, authenticator secret, passkey reference, consent records and the whole log from this device. Nothing is recoverable and you would set Sakina up again from scratch.",
+  erase:"Erase everything permanently",
+  eraseConfirm:"This permanently deletes everything Sakina holds on this device. It cannot be undone. Continue?",
+  faceDelConfirm:"Permanently delete your face signature? You would need to enrol again to use face sign-in."},
+ ar:{footer:"كل شيء هنا يبقى في هذا الجهاز. لا حساب على أي خادم، ولا رفع لأي بيانات.",
+  setupTitle:"أنشئ حسابك في سكينة",setupSub:"الخطوة ١ من ٣ — بياناتك",
+  setupIntro:"تحتفظ «سكينة» بحسابك داخل هذا الهاتف فقط. بريدك هو اسم الحساب، أما الرمز السري فلا يُخزَّن في أي مكان — يُحوَّل إلى بصمة تحقّق أحادية الاتجاه وهو ما يفتح بياناتك.",
+  email:"البريد الإلكتروني",name:"اسمك",pin:"الرمز السري (٦ خانات فأكثر)",pin2:"تأكيد الرمز",
+  agree:"قرأت إشعار الخصوصية وأوافق على أن تحفظ «سكينة» بريدي وبصمة التحقّق من رمزي وبياناتي داخل هذا الجهاز فقط.",
+  next:"متابعة",skip:"تخطَّ هذه الخطوة",finish:"إنهاء وفتح سكينة",
+  faceTitle:"الدخول بالوجه",faceSub:"الخطوة ٢ من ٣ — اختيارية",
+  faceIntro:"أضف صورة لوجهك لتدخل بالنظر إلى الكاميرا بدل كتابة الرمز. هذه وسيلة تسهيل على هاتفك الشخصي وليست تحققًا بمستوى المصارف — ورمزك السري يعمل دائمًا وهو الأقوى بينهما.",
+  bioPoints:[
+   "ما يُنشأ: بصمة رقمية للوجه (قائمة أرقام يستخرجها النموذج المدمج في هذه الصفحة). أما الصورة نفسها فلا يُحتفظ بها.",
+   "أين تُخزَّن: مشفَّرة داخل هذا الجهاز فقط. لا تُرفع ولا تُشارَك ولا تُنقل خارج الدولة — إذ لا يوجد خادم تُرسل إليه.",
+   "الأساس القانوني: موافقتك الصريحة. بصمة الوجه بيانات بيومترية، وهي بيانات شخصية حسّاسة بموجب المرسوم بقانون اتحادي رقم ٤٥ لسنة ٢٠٢١.",
+   "مدة الاحتفاظ: حتى تحذفها. في قسم «الأمان» زر لحذف بصمة الوجه نهائيًّا ودون رجعة.",
+   "هذه الخطوة اختيارية، ورفضها لا يغيّر شيئًا آخر في التطبيق."],
+  bioAgree:"قرأت ما سبق وأمنح موافقتي الصريحة والحرّة على إنشاء بصمة لوجهي وحفظها في هذا الجهاز.",
+  useCamera:"التقط صورة",uploadPhoto:"ارفع صورة",retake:"أعد الالتقاط",
+  faceHint:"املأ الإطار بوجهك في إضاءة متساوية ثم ثبّت.",
+  faceSaved:"حُفظت بصمة الوجه.",faceWorking:"أقرأ ملامح وجهك…",
+  totpTitle:"تطبيق المصادقة",totpSub:"الخطوة ٣ من ٣ — اختيارية",
+  totpIntro:"امسح هذا الرمز بتطبيق Google Authenticator أو Microsoft Authenticator أو أي تطبيق TOTP، ثم اكتب الخانات الست التي يعرضها لتأكيد الاقتران.",
+  welcome:"أهلًا بعودتك",unlockSub:"اختر طريقة الدخول",unlock:"فتح القفل",
+  usePin:"الرمز السري",usePasskey:"مفتاح المرور / بصمة الجهاز",useTotp:"رمز تطبيق المصادقة",useFace:"الدخول بالوجه",
+  faceUnlockTitle:"الدخول بالوجه",faceUnlockSub:"انظر إلى الكاميرا",faceGo:"ادخل بوجهي",
+  passkeyOk:"تم التحقق من مفتاح المرور — أدخل رمزك السري لفتح بياناتك.",
+  code:"الرمز المكوّن من ٦ خانات",pinToOpen:"الرمز السري",verify:"تحقّق",back:"رجوع",
+  errEmail:"أدخل بريدًا إلكترونيًّا صحيحًا.",
+  errPin:"يجب أن يكون الرمز ٦ خانات على الأقل.",errMatch:"الرمزان غير متطابقين.",
+  errWrong:"رمز خاطئ. تبقّت {n} محاولات قبل التوقّف المؤقت.",
+  errCode:"هذا الرمز غير صالح الآن. تحقّق من تطبيق المصادقة وأعد المحاولة.",
+  errPasskey:"تعذّر التحقق من مفتاح المرور على هذا الجهاز.",
+  errFace:"التطابق غير كافٍ ({s}٪). أعد المحاولة بإضاءة أفضل أو استخدم رمزك السري.",
+  errFaceCam:"تعذّر فتح الكاميرا. اسمح بالوصول إليها أو ارفع صورة بدلًا من ذلك.",
+  errNoModel:"ما زال نموذج الوجه قيد التحميل. انتظر لحظة ثم أعد المحاولة.",
+  lockedFor:"محاولات كثيرة. أعد المحاولة بعد {s} ثانية.",
+  mustAgree:"يرجى تعليم المربع لمنح موافقتك.",
+  consentTitle:"الموافقة على استخدام الكاميرا",consentSub:"مطلوبة قبل فتح الكاميرا",
+  consentBody:"تريد «سكينة» فتح الكاميرا لقراءة تعبير وجهك. اقرأ ما يلي قبل الموافقة:",
+  consentPoints:[
+   "الغرض: تصنيف تعبير وجهك إلى حزن أو سعادة أو غضب ليتجاوب التطبيق مع حالتك.",
+   "ما تتم معالجته: لقطات من الكاميرا الأمامية داخل ذاكرة هذا المتصفح فقط.",
+   "ما يُخزَّن: لا شيء. لا صورة ولا فيديو يُحفَظ أو يُرسَل أو يُشارَك، وتُحذف كل لقطة فور تصنيفها.",
+   "أين: داخل هذا الجهاز بالكامل. لا يُرسل شيء إلى أي خادم، ولا تغادر أي بيانات الدولة أو تعبر الحدود.",
+   "الأساس القانوني: موافقتك الصريحة. بيانات الوجه بيانات شخصية حسّاسة بموجب المرسوم بقانون اتحادي رقم ٤٥ لسنة ٢٠٢١.",
+   "حقوقك: اسحب الموافقة في أي لحظة من قسم «الأمان»، وامحُ كل ما تحتفظ به «سكينة» بزر واحد. والسحب سهل كالمنح ولا يكلّفك شيئًا.",
+   "مدة الاحتفاظ: يبقى سجل هذه الموافقة (تاريخ ورقم إصدار) في هذا الجهاز حتى تسحبها أو تمحو بياناتك."],
+  consentAgree:"قرأت ما سبق وأمنح موافقتي الصريحة والحرّة على استخدام الكاميرا لهذا الغرض.",
+  consentYes:"أوافق — افتح الكاميرا",consentNo:"ليس الآن",
+  noticeTitle:"إشعار الخصوصية",noticeSub:"كيف تتعامل سكينة مع بياناتك",
+  notice:[
+   "المتحكّم: هذه النسخة من «سكينة» العاملة على جهازك أنت. لا خادم ولا جهة تحتفظ ببياناتك.",
+   "ما يُخزَّن في هذا الجهاز: بريدك واسمك، وبصمة تحقّق من رمزك بخوارزمية PBKDF2-SHA-256 مع ملح عشوائي (٣١٠٬٠٠٠ دورة)، ومفتاح رئيسي مشفَّر، وبصمة وجه مشفَّرة إن أضفتها، وسرّ تطبيق المصادقة مشفَّرًا إن فعّلته، ومعرّف مفتاح المرور إن أضفته، وسجلات موافقتك، وسجل آخر ٤٠ محاولة دخول. أما الرمز السري نفسه فلا يُخزَّن إطلاقًا.",
+   "ما لا يُخزَّن أبدًا: الصور والفيديو وإحداثيات الموقع وكل ما تكتبه في المحادثة.",
+   "قوة كل طريقة دخول: الرمز السري وحده محميّ بمفتاح مشتقّ من سرٍّ تعرفه. أما الوجه وتطبيق المصادقة فيفكّان مفتاحًا محفوظًا في هذا الجهاز، فاعتبرهما تسهيلًا على هاتفك الشخصي واستخدم الرمز على جهاز مشترك.",
+   "الكاميرا: تُصنَّف اللقطات في الذاكرة بنموذج مدمج في الصفحة ثم تُحذف فورًا. وخاصية أقرب المراكز تقرأ إحداثياتك داخل المتصفح لترتيب قائمة مدمجة ولا تحتفظ بها ولا ترسلها.",
+   "المحادثة: حين تكتب إلى «سكينة» ويكون المساعد متاحًا تُرسل رسالتك إلى Claude لصياغة الرد. لا تكتب ما لا ترغب في معالجته لدى خدمة خارجية؛ والتطبيق يقدّم تحليلًا مكتوبًا محليًّا بدونه.",
+   "الاحتفاظ والمحو: يُمحى كل ما سبق نهائيًّا بزر «امحُ كل شيء» في قسم الأمان أو بمسح بيانات الموقع من متصفحك.",
+   "حقوقك بموجب قانون حماية البيانات الشخصية: الوصول والتصحيح والمحو والتقييد وسحب الموافقة — وتمارسها كلها داخل التطبيق لأنك تملك النسخة الوحيدة.",
+   "«سكينة» رفيق للعافية النفسية وليست جهازًا طبيًّا ولا تُشخّص."],
+  secEyebrow:"الأمان وبياناتك",secTitle:"قفلك وسجلّك وزر المحو",
+  secNote:"لا تحتفظ «سكينة» بحساب لك في أي مكان سوى هذا الجهاز، وكل ما في الأسفل يعمل داخل هذا الجهاز وحده.",
+  methods:"طرق الدخول",
+  methodsNote:"رمزك السري يعمل دائمًا. أما الوجه ومفتاح المرور وتطبيق المصادقة فبدائل يمكنك إضافتها أو إزالتها متى شئت.",
+  passkeyAdd:"أضف مفتاح مرور",passkeyOn:"مفتاح المرور مفعّل — إزالة",totpAdd:"أضف تطبيق مصادقة",totpOn:"تطبيق المصادقة مفعّل — إزالة",
+  faceAdd:"أضف الدخول بالوجه",faceOn:"الدخول بالوجه مفعّل — احذف البصمة",lockNow:"أقفل الآن",
+  faceDeleted:"حُذفت بصمة الوجه نهائيًّا.",
+  totpScan:"امسح هذا الرمز بتطبيق Google Authenticator أو Microsoft Authenticator أو أي تطبيق TOTP ثم أدخل الخانات الست.",
+  consentState:"موافقة الكاميرا",consentGiven:"مُنحت في {d}. يمكن استخدام الكاميرا لقراءة التعبير حتى تسحبها.",
+  consentNone:"غير ممنوحة. ستسأل الكاميرا قبل أن تفتح.",withdraw:"اسحب الموافقة",
+  logTitle:"محاولات الدخول",
+  logNote:"آخر ٤٠ محاولة محفوظة في هذا الجهاز: الطريقة والنتيجة والوقت والمنصّة. بلا عنوان IP ولا موقع ولا بصمة جهاز.",
+  ok:"ناجحة",failed:"فاشلة",logEmpty:"لا توجد محاولات مسجّلة بعد.",clearLog:"امسح السجل",
+  methodName:{pin:"الرمز السري",passkey:"مفتاح المرور",totp:"تطبيق المصادقة",face:"الوجه",setup:"إنشاء الحساب",consent:"الموافقة",lock:"إقفال"},
+  eraseTitle:"امحُ كل شيء",
+  eraseNote:"يحذف نهائيًّا ودون رجعة بريدك وبصمة رمزك والمفتاح الرئيسي وبصمة وجهك وسرّ المصادقة ومعرّف مفتاح المرور وسجلات الموافقة والسجل كاملًا من هذا الجهاز. لا استرجاع بعدها وستُعِدّ «سكينة» من جديد.",
+  erase:"امحُ كل شيء نهائيًّا",
+  eraseConfirm:"سيحذف هذا نهائيًّا كل ما تحتفظ به «سكينة» في هذا الجهاز، ولا يمكن التراجع. أتريد المتابعة؟",
+  faceDelConfirm:"أتريد حذف بصمة وجهك نهائيًّا؟ ستحتاج إلى تسجيلها من جديد لاستخدام الدخول بالوجه."}
+};
+
+/* ============================================================
+   Verification Gateway v2 — device-local, privacy-by-design
+   Account: email + PIN, with optional face sign-in, optional
+   TOTP authenticator and optional platform passkey.
+   Key model:
+     MK   = random 256-bit master key, seals face signature + TOTP secret
+     MK is wrapped twice:
+       wrapPin    — AES-GCM under PBKDF2-SHA-256(PIN, salt, 310k)
+       wrapDevice — AES-GCM under a key stored on this device, used by
+                    the face and authenticator paths, which cannot
+                    derive a key from a secret the user knows.
+   The difference in strength is stated to the user in the notice
+   rather than hidden: the PIN is the strong factor.
+   PDPL: face signature = biometric data -> separate explicit consent
+   before enrolment, encrypted at rest, never transmitted, deletable
+   permanently from the Security section, deletion written to the log.
+   ============================================================ */
+const SK={acc:"sakina.account",log:"sakina.log",consent:"sakina.consent",bio:"sakina.bioconsent",fail:"sakina.fail"};
+const enc=new TextEncoder(), dec=new TextDecoder();
+const b64=b=>btoa(String.fromCharCode(...new Uint8Array(b)));
+const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const rnd=n=>crypto.getRandomValues(new Uint8Array(n));
+function lsGet(k,d){ try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;} }
+function lsSet(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
+const FACE_THRESHOLD=0.86;   /* cosine similarity; tune after real testing */
+
+async function pbkdf2(pin,saltB64,usage){
+  const salt=unb64(saltB64);
+  const base=await crypto.subtle.importKey("raw",enc.encode(pin+"|"+usage),"PBKDF2",false,["deriveBits","deriveKey"]);
+  if(usage==="verify"){
+    const bits=await crypto.subtle.deriveBits({name:"PBKDF2",salt,iterations:310000,hash:"SHA-256"},base,256);
+    return b64(bits);
+  }
+  return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:310000,hash:"SHA-256"},base,
+    {name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
+}
+const aesKey=raw=>crypto.subtle.importKey("raw",raw,{name:"AES-GCM"},false,["encrypt","decrypt"]);
+async function seal(key,obj){
+  const iv=rnd(12);
+  const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},key,enc.encode(JSON.stringify(obj)));
+  return {iv:b64(iv),ct:b64(ct)};
+}
+async function unseal(key,box){
+  try{ return JSON.parse(dec.decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:unb64(box.iv)},key,unb64(box.ct)))); }
+  catch(e){ return null; }
+}
+function same(a,b){ if(a.length!==b.length) return false; let r=0; for(let i=0;i<a.length;i++) r|=a.charCodeAt(i)^b.charCodeAt(i); return r===0; }
+async function mkViaPin(acc,pin){
+  const k=await pbkdf2(pin,acc.salt,"data");
+  const o=await unseal(k,acc.wrapPin);
+  return o?aesKey(unb64(o.mk)):null;
+}
+async function mkViaDevice(acc){
+  const k=await aesKey(unb64(acc.deviceKey));
+  const o=await unseal(k,acc.wrapDevice);
+  return o?aesKey(unb64(o.mk)):null;
+}
+
+/* ---- audit log ---- */
+function logAuth(method,ok,extra){
+  const l=lsGet(SK.log,[]);
+  l.unshift({t:Date.now(),m:method,ok:!!ok,p:(navigator.platform||"device").slice(0,24),x:extra||""});
+  lsSet(SK.log,l.slice(0,40));
+}
+function failState(){ return lsGet(SK.fail,{n:0,until:0}); }
+function lockedFor(){ return Math.max(0,failState().until-Date.now()); }
+function noteFail(){ const f=failState(); f.n++; if(f.n>=8) f.until=Date.now()+300000; else if(f.n>=5) f.until=Date.now()+30000; lsSet(SK.fail,f); }
+function clearFail(){ lsSet(SK.fail,{n:0,until:0}); }
+
+/* ---- TOTP (RFC 6238) ---- */
+const B32="ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+function b32enc(bytes){ let bits="",out=""; for(const b of bytes) bits+=b.toString(2).padStart(8,"0");
+  for(let i=0;i+5<=bits.length;i+=5) out+=B32[parseInt(bits.substr(i,5),2)]; return out; }
+function b32dec(s){ s=s.replace(/=+$/,"").toUpperCase(); let bits="";
+  for(const c of s){ const v=B32.indexOf(c); if(v<0) continue; bits+=v.toString(2).padStart(5,"0"); }
+  const o=[]; for(let i=0;i+8<=bits.length;i+=8) o.push(parseInt(bits.substr(i,8),2)); return new Uint8Array(o); }
+async function totpAt(secret32,counter){
+  const key=await crypto.subtle.importKey("raw",b32dec(secret32),{name:"HMAC",hash:"SHA-1"},false,["sign"]);
+  const buf=new ArrayBuffer(8), v=new DataView(buf);
+  v.setUint32(0,Math.floor(counter/0x100000000)); v.setUint32(4,counter>>>0);
+  const sig=new Uint8Array(await crypto.subtle.sign("HMAC",key,buf));
+  const o=sig[19]&0xf;
+  return String((((sig[o]&0x7f)<<24)|(sig[o+1]<<16)|(sig[o+2]<<8)|sig[o+3])%1000000).padStart(6,"0");
+}
+async function totpVerify(secret32,code){
+  const c=Math.floor(Date.now()/30000);
+  for(const d of [-1,0,1]) if(same(await totpAt(secret32,c+d),code)) return true;
+  return false;
+}
+
+/* ---- face signature: 1280-d embedding from the model already in the page ---- */
+function faceVector(srcCanvas){
+  return tf.tidy(()=>{
+    const x=tf.browser.fromPixels(srcCanvas).toFloat().div(127.5).sub(1).expandDims(0);
+    const e=model.layers[0].apply(x).flatten();          /* mobilenet + global average pooling */
+    const n=e.div(e.norm().add(1e-8));                   /* L2 normalised, so a dot product is the cosine */
+    return Array.from(n.dataSync());
+  });
+}
+function cosine(a,b){ let s=0; for(let i=0;i<a.length;i++) s+=a[i]*b[i]; return s; }
+function drawToSquare(src,cv,mirror){
+  const c=cv.getContext("2d");
+  const w=src.videoWidth||src.naturalWidth||src.width, h=src.videoHeight||src.naturalHeight||src.height;
+  const side=Math.min(w,h);
+  c.save(); if(mirror){ c.translate(224,0); c.scale(-1,1); }
+  c.drawImage(src,(w-side)/2,(h-side)/2,side,side,0,0,224,224); c.restore();
+}
+
+/* ---- session ---- */
+let session=null, idleTimer=null;
+const IDLE_MS=300000;
+function touchSession(){ if(!session) return; clearTimeout(idleTimer); idleTimer=setTimeout(()=>lockNow("idle"),IDLE_MS); }
+["click","keydown","touchstart"].forEach(e=>addEventListener(e,touchSession,{passive:true}));
+function lockNow(why){
+  session=null; clearTimeout(idleTimer);
+  try{ if(stream) stopCam(); }catch(e){}
+  gateMode=lsGet(SK.acc,null)?"unlock":"setup1"; gateErr="";
+  showGate(); if(why==="idle") logAuth("lock",true,"idle");
+}
+
+/* ---- gate ---- */
+let gateMode="unlock", gateErr="", gateMsg="", pendingConsent=null;
+let draft={}, gStream=null, gVector=null, totpDraft=null;
+function A(){ return AUTH[L.lang]; }
+function showGate(){ $("gate").hidden=false; document.body.style.overflow="hidden"; renderGate(); }
+function hideGate(){ stopGateCam(); $("gate").hidden=true; document.body.style.overflow=""; }
+function stopGateCam(){ if(gStream){ gStream.getTracks().forEach(t=>t.stop()); gStream=null; } }
+function shell(title,sub,inner){
+  return '<div class="gatehead"><div class="mark" aria-hidden="true">'+
+   '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round">'+
+   '<path d="M4 14c2.5 3 5.2 4.5 8 4.5S17.5 17 20 14"/>'+
+   '<circle cx="8.5" cy="9" r="1.1" fill="#fff" stroke="none"/><circle cx="15.5" cy="9" r="1.1" fill="#fff" stroke="none"/>'+
+   '</svg></div><div><h2>'+esc(title)+'</h2><p>'+esc(sub)+'</p></div></div>'+
+   '<div class="card">'+inner+'</div>'+
+   '<p class="note" style="text-align:center">'+esc(A().footer)+'</p>';
+}
+function errBox(){ return '<div class="err" id="gErr">'+esc(gateErr)+'</div>'+
+  (gateMsg?'<p class="note" style="color:var(--teal);font-weight:600">'+esc(gateMsg)+'</p>':''); }
+function faceStage(){
+  return '<div class="facestage"><video id="gVid" playsinline autoplay muted></video>'+
+    '<canvas id="gShot" width="224" height="224" class="hidden"></canvas>'+
+    '<div class="facehint" id="gHint">'+esc(A().faceHint)+'</div></div>';
+}
+function renderGate(){
+  document.documentElement.setAttribute("dir",L.dir);
+  const a=A(), acc=lsGet(SK.acc,null), panel=$("gatePanel");
+  const keep={}; ["gEmail","gName","gPin","gPin2","gCode"].forEach(id=>{const el=$(id); if(el) keep[id]=el.value;});
+  const restore=()=>Object.keys(keep).forEach(id=>{const el=$(id); if(el&&keep[id]!=null) el.value=keep[id];});
+  setTimeout(restore,0);
+
+  if(gateMode==="setup1"){
+    panel.innerHTML=shell(a.setupTitle,a.setupSub,
+      '<p class="consent">'+esc(a.setupIntro)+'</p>'+
+      '<div class="field"><label for="gEmail">'+esc(a.email)+'</label><input id="gEmail" type="email" inputmode="email" autocomplete="email"></div>'+
+      '<div class="field"><label for="gName">'+esc(a.name)+'</label><input id="gName" autocomplete="nickname" maxlength="40"></div>'+
+      '<div class="field"><label for="gPin">'+esc(a.pin)+'</label><input id="gPin" class="pinrow" type="password" inputmode="numeric" autocomplete="new-password" maxlength="12"></div>'+
+      '<div class="field"><label for="gPin2">'+esc(a.pin2)+'</label><input id="gPin2" class="pinrow" type="password" inputmode="numeric" autocomplete="new-password" maxlength="12"></div>'+
+      '<label class="agree"><input type="checkbox" id="gAgree"'+(draft.agree?" checked":"")+'><span>'+esc(a.agree)+'</span></label>'+
+      errBox()+
+      '<div class="stack"><button class="btn" id="gNext" type="button">'+esc(a.next)+'</button>'+
+      '<button class="btn ghost" id="gPrivacy" type="button">'+esc(a.readNotice||a.noticeTitle)+'</button></div>');
+    $("gNext").onclick=step1Next;
+    $("gPrivacy").onclick=()=>{gateMode="notice";renderGate();};
+  }
+  else if(gateMode==="setupFace"){
+    const consented=lsGet(SK.bio,null);
+    panel.innerHTML=shell(a.faceTitle,a.faceSub,
+      '<p class="consent">'+esc(a.faceIntro)+'</p>'+
+      (consented?faceStage()+
+        '<div class="stack"><button class="btn" id="fShoot" type="button">'+esc(a.useCamera)+'</button>'+
+        '<label class="btn ghost" for="fFile" style="text-align:center;cursor:pointer">'+esc(a.uploadPhoto)+'</label>'+
+        '<input id="fFile" type="file" accept="image/*" hidden></div>'
+        :'<div class="consent"><ul>'+a.bioPoints.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></div>'+
+         '<label class="agree"><input type="checkbox" id="bAgree"><span>'+esc(a.bioAgree)+'</span></label>'+
+         '<div class="stack"><button class="btn" id="bYes" type="button">'+esc(a.next)+'</button></div>')+
+      errBox()+
+      '<div class="stack"><button class="btn ghost" id="fSkip" type="button">'+esc(a.skip)+'</button></div>');
+    $("fSkip").onclick=()=>{ stopGateCam(); gateErr=gateMsg=""; gateMode="setupTotp"; renderGate(); };
+    if($("bYes")) $("bYes").onclick=()=>{
+      if(!$("bAgree").checked){ gateErr=a.mustAgree; renderGate(); return; }
+      lsSet(SK.bio,{v:1,at:Date.now()}); logAuth("consent",true,"biometric enrolment");
+      gateErr=""; renderGate();
+    };
+    if($("fShoot")){ startGateCam(); $("fShoot").onclick=enrolFromCamera; $("fFile").onchange=enrolFromFile; }
+  }
+  else if(gateMode==="setupTotp"){
+    panel.innerHTML=shell(a.totpTitle,a.totpSub,
+      '<p class="consent">'+esc(a.totpIntro)+'</p>'+
+      '<div class="totpbox"><div class="box"><canvas id="totpQr" width="300" height="300"></canvas></div>'+
+      '<div style="flex:1 1 190px"><div class="secret">'+esc((totpDraft?totpDraft.secret:"").replace(/(.{4})/g,"$1 ").trim())+'</div>'+
+      '<div class="field"><label for="gCode">'+esc(a.code)+'</label><input id="gCode" class="pinrow" inputmode="numeric" maxlength="6"></div></div></div>'+
+      errBox()+
+      '<div class="stack"><button class="btn" id="tVerify" type="button">'+esc(a.verify)+'</button>'+
+      '<button class="btn ghost" id="tSkip" type="button">'+esc(a.skip)+'</button></div>');
+    if(!totpDraft) totpDraft={secret:b32enc(rnd(20))};
+    try{ if(window.QRious) new QRious({element:$("totpQr"),size:300,level:"M",background:"#ffffff",foreground:"#12211f",padding:0,
+      value:"otpauth://totp/Sakina:"+encodeURIComponent(draft.email||"user")+"?secret="+totpDraft.secret+"&issuer=Sakina&digits=6&period=30"}); }catch(e){}
+    $("tVerify").onclick=verifyTotpDraft;
+    $("tSkip").onclick=()=>finishSetup(false);
+  }
+  else if(gateMode==="unlock"){
+    const wait=Math.ceil(lockedFor()/1000);
+    panel.innerHTML=shell(a.welcome+(acc&&acc.name?", "+acc.name:""),a.unlockSub,
+      '<div class="field"><label for="gPin">'+esc(a.pin)+'</label>'+
+      '<input id="gPin" class="pinrow" type="password" inputmode="numeric" autocomplete="current-password" maxlength="12"'+(wait?" disabled":"")+'></div>'+
+      (wait?'<div class="err">'+esc(a.lockedFor.replace("{s}",wait))+'</div>':errBox())+
+      '<div class="stack"><button class="btn" id="gUnlock" type="button"'+(wait?" disabled":"")+'>'+esc(a.unlock)+'</button>'+
+      (acc&&acc.face?'<button class="btn ghost" id="gFace" type="button">'+esc(a.useFace)+'</button>':'')+
+      (acc&&acc.webauthn?'<button class="btn ghost" id="gPass" type="button">'+esc(a.usePasskey)+'</button>':'')+
+      (acc&&acc.totp?'<button class="btn ghost" id="gTotp" type="button">'+esc(a.useTotp)+'</button>':'')+'</div>');
+    $("gUnlock").onclick=doUnlock;
+    $("gPin").addEventListener("keydown",e=>{if(e.key==="Enter")doUnlock();});
+    if($("gFace")) $("gFace").onclick=()=>{gateErr=gateMsg="";gateMode="faceUnlock";renderGate();};
+    if($("gPass")) $("gPass").onclick=doPasskeyUnlock;
+    if($("gTotp")) $("gTotp").onclick=()=>{gateErr=gateMsg="";gateMode="totpUnlock";renderGate();};
+    if(wait) setTimeout(()=>{if(gateMode==="unlock")renderGate();},1000);
+  }
+  else if(gateMode==="faceUnlock"){
+    panel.innerHTML=shell(a.faceUnlockTitle,a.faceUnlockSub,
+      faceStage()+errBox()+
+      '<div class="stack"><button class="btn" id="fGo" type="button">'+esc(a.faceGo)+'</button>'+
+      '<button class="btn ghost" id="fBack" type="button">'+esc(a.back)+'</button></div>');
+    startGateCam();
+    $("fGo").onclick=doFaceUnlock;
+    $("fBack").onclick=()=>{stopGateCam();gateErr=gateMsg="";gateMode="unlock";renderGate();};
+  }
+  else if(gateMode==="totpUnlock"){
+    panel.innerHTML=shell(a.useTotp,a.unlockSub,
+      '<div class="field"><label for="gCode">'+esc(a.code)+'</label>'+
+      '<input id="gCode" class="pinrow" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></div>'+
+      errBox()+
+      '<div class="stack"><button class="btn" id="gGo" type="button">'+esc(a.verify)+'</button>'+
+      '<button class="btn ghost" id="gBack" type="button">'+esc(a.back)+'</button></div>');
+    $("gGo").onclick=doTotpUnlock;
+    $("gBack").onclick=()=>{gateErr=gateMsg="";gateMode="unlock";renderGate();};
+  }
+  else if(gateMode==="consent"){
+    panel.innerHTML=shell(a.consentTitle,a.consentSub,
+      '<div class="consent"><p>'+esc(a.consentBody)+'</p><ul>'+a.consentPoints.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></div>'+
+      '<label class="agree"><input type="checkbox" id="cAgree"><span>'+esc(a.consentAgree)+'</span></label>'+
+      errBox()+
+      '<div class="stack"><button class="btn" id="cYes" type="button">'+esc(a.consentYes)+'</button>'+
+      '<button class="btn ghost" id="cNo" type="button">'+esc(a.consentNo)+'</button></div>');
+    $("cYes").onclick=()=>{
+      if(!$("cAgree").checked){ gateErr=a.mustAgree; renderGate(); return; }
+      lsSet(SK.consent,{v:1,at:Date.now(),purpose:"expression-classification-on-device",lang:L.lang});
+      logAuth("consent",true,"camera"); gateErr=""; hideGate();
+      const f=pendingConsent; pendingConsent=null; if(f) f();
+    };
+    $("cNo").onclick=()=>{ gateErr=""; pendingConsent=null; logAuth("consent",false,"declined"); hideGate(); };
+  }
+  else if(gateMode==="notice"){
+    panel.innerHTML=shell(a.noticeTitle,a.noticeSub,
+      '<div class="consent">'+a.notice.map(x=>'<p>'+esc(x)+'</p>').join("")+'</div>'+
+      '<div class="stack"><button class="btn" id="nBack" type="button">'+esc(a.back)+'</button></div>');
+    $("nBack").onclick=()=>{gateMode=lsGet(SK.acc,null)?"unlock":"setup1";renderGate();};
+  }
+}
+async function startGateCam(){
+  if(gStream) return;
+  try{
+    gStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:640}},audio:false});
+    const v=$("gVid"); if(v){ v.srcObject=gStream; }
+  }catch(e){ gateErr=A().errFaceCam; renderGate(); }
+}
+/* ---- setup steps ---- */
+function step1Next(){
+  const a=A(), email=$("gEmail").value.trim(), name=$("gName").value.trim(), pin=$("gPin").value, pin2=$("gPin2").value;
+  if(!/^[^@\s]+@[^@\s.]+\.[^@\s]{2,}$/.test(email)){ gateErr=a.errEmail; renderGate(); return; }
+  if(pin.length<6){ gateErr=a.errPin; renderGate(); return; }
+  if(pin!==pin2){ gateErr=a.errMatch; renderGate(); return; }
+  if(!$("gAgree").checked){ gateErr=a.mustAgree; renderGate(); return; }
+  draft={email,name:name||email.split("@")[0],pin,agree:true};
+  gateErr=gateMsg=""; gVector=null; gateMode="setupFace"; renderGate();
+}
+async function captureVectors(n){
+  const r=await modelReady;
+  if(r==="err"||!model) throw new Error("model");
+  const cv=$("gShot"), v=$("gVid"), acc=[];
+  for(let i=0;i<n;i++){
+    drawToSquare(v,cv,true);
+    const vec=faceVector(cv); acc.push(vec);
+    await new Promise(r=>setTimeout(r,140));
+  }
+  const mean=acc[0].map((_,i)=>acc.reduce((s,a2)=>s+a2[i],0)/acc.length);
+  const norm=Math.hypot(...mean)||1;
+  return mean.map(x=>x/norm);
+}
+async function enrolFromCamera(){
+  const a=A();
+  if(!gStream){ gateErr=a.errFaceCam; renderGate(); return; }
+  gateErr=""; gateMsg=a.faceWorking; renderGate();
+  try{
+    gVector=await captureVectors(6);
+    gateMsg=a.faceSaved; gateErr=""; renderGate();
+    setTimeout(()=>{ stopGateCam(); gateMsg=""; gateMode="setupTotp"; renderGate(); },900);
+  }catch(e){ gateMsg=""; gateErr=a.errNoModel; renderGate(); }
+}
+function enrolFromFile(e){
+  const a=A(), f=e.target.files&&e.target.files[0]; if(!f) return;
+  const img=new Image();
+  img.onload=async()=>{
+    try{
+      await modelReady;
+      drawToSquare(img,$("gShot"),false);
+      gVector=faceVector($("gShot"));
+      gateMsg=a.faceSaved; gateErr=""; renderGate();
+      setTimeout(()=>{ stopGateCam(); gateMsg=""; gateMode="setupTotp"; renderGate(); },900);
+    }catch(x){ gateErr=a.errNoModel; renderGate(); }
+    URL.revokeObjectURL(img.src);
+  };
+  img.src=URL.createObjectURL(f);
+}
+async function verifyTotpDraft(){
+  const a=A(), code=$("gCode").value.trim();
+  if(!(await totpVerify(totpDraft.secret,code))){ gateErr=a.errCode; renderGate(); return; }
+  finishSetup(true);
+}
+async function finishSetup(withTotp){
+  const acc={email:draft.email,name:draft.name,created:Date.now(),v:2};
+  acc.salt=b64(rnd(16));
+  acc.verifier=await pbkdf2(draft.pin,acc.salt,"verify");
+  const mkRaw=rnd(32), MK=await aesKey(mkRaw);
+  acc.deviceKey=b64(rnd(32));
+  acc.wrapPin=await seal(await pbkdf2(draft.pin,acc.salt,"data"),{mk:b64(mkRaw)});
+  acc.wrapDevice=await seal(await aesKey(unb64(acc.deviceKey)),{mk:b64(mkRaw)});
+  if(gVector) acc.face=await seal(MK,{v:gVector,at:Date.now()});
+  if(withTotp&&totpDraft) acc.totp=await seal(MK,{secret:totpDraft.secret});
+  lsSet(SK.acc,acc);
+  draft={}; totpDraft=null; gVector=null; clearFail();
+  logAuth("setup",true,"account created");
+  session={email:acc.email,name:acc.name,key:MK};
+  gateErr=gateMsg=""; hideGate(); touchSession(); afterUnlock();
+}
+/* ---- unlock paths ---- */
+async function doUnlock(){
+  const a=A(); if(lockedFor()) return;
+  const acc=lsGet(SK.acc,null), pin=$("gPin").value;
+  if(!same(await pbkdf2(pin,acc.salt,"verify"),acc.verifier)){
+    noteFail(); logAuth("pin",false,"");
+    gateErr=lockedFor()?a.lockedFor.replace("{s}",Math.ceil(lockedFor()/1000)):a.errWrong.replace("{n}",Math.max(0,5-failState().n));
+    renderGate(); return;
+  }
+  const MK=await mkViaPin(acc,pin);
+  session={email:acc.email,name:acc.name,key:MK};
+  clearFail(); logAuth("pin",true,""); gateErr=""; hideGate(); touchSession(); afterUnlock();
+}
+async function doFaceUnlock(){
+  const a=A(), acc=lsGet(SK.acc,null);
+  if(lockedFor()) return;
+  if(!gStream){ gateErr=a.errFaceCam; renderGate(); return; }
+  gateErr=""; gateMsg=a.faceWorking; renderGate();
+  let live; try{ live=await captureVectors(4); }catch(e){ gateMsg=""; gateErr=a.errNoModel; renderGate(); return; }
+  const MK=await mkViaDevice(acc);
+  const stored=MK?await unseal(MK,acc.face):null;
+  const s=stored?cosine(live,stored.v):0;
+  gateMsg="";
+  if(s<FACE_THRESHOLD){
+    noteFail(); logAuth("face",false,"score "+s.toFixed(3));
+    gateErr=a.errFace.replace("{s}",Math.round(s*100)); renderGate(); return;
+  }
+  clearFail(); logAuth("face",true,"score "+s.toFixed(3));
+  stopGateCam();
+  session={email:acc.email,name:acc.name,key:MK};
+  hideGate(); touchSession(); afterUnlock();
+}
+async function doTotpUnlock(){
+  const a=A(), acc=lsGet(SK.acc,null);
+  if(lockedFor()) return;
+  const MK=await mkViaDevice(acc);
+  const box=MK?await unseal(MK,acc.totp):null;
+  const code=$("gCode").value.trim();
+  if(!box||!(await totpVerify(box.secret,code))){
+    noteFail(); logAuth("totp",false,"code"); gateErr=a.errCode; renderGate(); return;
+  }
+  clearFail(); logAuth("totp",true,"");
+  session={email:acc.email,name:acc.name,key:MK};
+  gateErr=""; hideGate(); touchSession(); afterUnlock();
+}
+async function doPasskeyUnlock(){
+  const a=A(), acc=lsGet(SK.acc,null);
+  try{
+    await navigator.credentials.get({publicKey:{challenge:rnd(32),timeout:60000,userVerification:"required",
+      allowCredentials:[{type:"public-key",id:unb64(acc.webauthn.id)}]}});
+  }catch(e){ logAuth("passkey",false,""); gateErr=a.errPasskey; renderGate(); return; }
+  clearFail(); logAuth("passkey",true,"");
+  const MK=await mkViaDevice(acc);
+  session={email:acc.email,name:acc.name,key:MK};
+  gateErr=""; hideGate(); touchSession(); afterUnlock();
+}
+function afterUnlock(){
+  renderSecurity();
+  const w=document.querySelector(".wrap"); if(w) w.style.visibility="visible";
+}
+function withCameraConsent(fn){
+  const c=lsGet(SK.consent,null);
+  if(c&&c.v===1){ fn(); return; }
+  pendingConsent=fn; gateMode="consent"; gateErr=""; showGate();
+}
+
+/* ---- security panel ---- */
+let secTotpDraft=null, secFaceMode=false;
+function renderSecurity(){
+  const a=A(), acc=lsGet(SK.acc,null); if(!acc||!session) return;
+  const B=ABOUT[L.lang];
+  $("profHead").innerHTML='<div class="dev" style="border-top:0;margin:0 0 16px;padding-top:0">'+
+    '<div class="mono">'+esc((acc.name||acc.email).slice(0,2).toUpperCase())+'</div><div>'+
+    '<h3>'+esc(acc.name||acc.email)+'</h3><p>'+esc(acc.email)+'</p>'+
+    '<p>'+esc(B.member.replace("{d}",new Date(acc.created).toLocaleDateString(L.lang==="ar"?"ar-AE":"en-GB")))+' — '+esc(B.signedIn)+'</p>'+
+    '</div></div>';
+  $("t-sec").textContent=a.secEyebrow; $("secTitle").textContent=a.secTitle; $("secNote").textContent=a.secNote;
+  const c=lsGet(SK.consent,null), log=lsGet(SK.log,[]);
+  let h='<div class="practice"><h3>'+esc(a.methods)+'</h3><p>'+esc(a.methodsNote)+'</p>'+
+    '<p class="note" style="margin-top:6px">'+esc(acc.email)+'</p>'+
+    '<div class="links" style="margin-top:10px">'+
+    '<a class="blink'+(acc.face?" free":"")+'" href="#" id="sFace">'+esc(acc.face?a.faceOn:a.faceAdd)+'</a>'+
+    '<a class="blink'+(acc.webauthn?" free":"")+'" href="#" id="sPass">'+esc(acc.webauthn?a.passkeyOn:a.passkeyAdd)+'</a>'+
+    '<a class="blink'+(acc.totp?" free":"")+'" href="#" id="sTotp">'+esc(acc.totp?a.totpOn:a.totpAdd)+'</a>'+
+    '<a class="blink" href="#" id="sLock">'+esc(a.lockNow)+'</a></div>'+
+    (secFaceMode?'<div style="margin-top:14px">'+
+      '<div class="consent"><ul>'+a.bioPoints.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></div>'+
+      '<div class="facestage"><video id="gVid" playsinline autoplay muted></video>'+
+      '<canvas id="gShot" width="224" height="224" class="hidden"></canvas>'+
+      '<div class="facehint">'+esc(a.faceHint)+'</div></div>'+
+      '<div class="err" id="sFaceErr"></div>'+
+      '<div class="stack"><button class="btn" id="sFaceShoot" type="button">'+esc(a.useCamera)+'</button>'+
+      '<label class="btn ghost" for="sFaceFile" style="text-align:center;cursor:pointer">'+esc(a.uploadPhoto)+'</label>'+
+      '<input id="sFaceFile" type="file" accept="image/*" hidden>'+
+      '<button class="btn ghost" id="sFaceCancel" type="button">'+esc(a.back)+'</button></div></div>':'')+
+    (secTotpDraft?'<div class="totpbox"><div class="box"><canvas id="totpQr2" width="300" height="300"></canvas></div>'+
+      '<div style="flex:1 1 200px"><p style="font-size:13.5px;color:var(--ink-soft);margin:0">'+esc(a.totpScan)+'</p>'+
+      '<div class="secret">'+esc(secTotpDraft.secret.replace(/(.{4})/g,"$1 ").trim())+'</div>'+
+      '<div class="field"><label for="tCode">'+esc(a.code)+'</label><input id="tCode" class="pinrow" inputmode="numeric" maxlength="6"></div>'+
+      '<div class="err" id="tErr"></div>'+
+      '<div class="stack"><button class="btn" id="tSave" type="button">'+esc(a.verify)+'</button></div></div></div>':'')+
+    '</div>';
+  h+='<div class="practice"><h3>'+esc(a.consentState)+'</h3><p>'+
+    esc(c?a.consentGiven.replace("{d}",new Date(c.at).toLocaleString(L.lang==="ar"?"ar-AE":"en-GB")):a.consentNone)+'</p>'+
+    (c?'<div class="links" style="margin-top:8px"><a class="blink" href="#" id="sWithdraw">'+esc(a.withdraw)+'</a></div>':'')+'</div>';
+  h+='<div class="practice"><h3>'+esc(a.logTitle)+'</h3><p>'+esc(a.logNote)+'</p><div style="margin-top:10px">'+
+    (log.length?log.slice(0,12).map(r=>'<div class="logrow"><span class="dot'+(r.ok?"":" bad")+'"></span>'+
+      '<span>'+esc(a.methodName[r.m]||r.m)+' — '+esc(r.ok?a.ok:a.failed)+'</span><time>'+
+      esc(new Date(r.t).toLocaleString(L.lang==="ar"?"ar-AE":"en-GB",{dateStyle:"short",timeStyle:"short"}))+'</time></div>').join("")
+      :'<p style="font-size:13.5px;color:var(--ink-soft)">'+esc(a.logEmpty)+'</p>')+
+    '</div><div class="links" style="margin-top:10px"><a class="blink" href="#" id="sClearLog">'+esc(a.clearLog)+'</a></div></div>';
+  h+='<div class="practice"><h3>'+esc(a.eraseTitle)+'</h3><p>'+esc(a.eraseNote)+'</p>'+
+    '<div class="stack" style="margin-top:10px"><button class="btn danger" id="sErase" type="button">'+esc(a.erase)+'</button></div></div>';
+  h+='<div class="practice"><h3>'+esc(a.noticeTitle)+'</h3>'+a.notice.map(x=>'<p>'+esc(x)+'</p>').join("")+'</div>';
+  $("secBody").innerHTML=h;
+
+  $("sLock").onclick=e=>{e.preventDefault();lockNow("manual");};
+  $("sFace").onclick=async e=>{
+    e.preventDefault();
+    if(acc.face){
+      if(!confirm(a.faceDelConfirm)) return;
+      delete acc.face; lsSet(SK.acc,acc); localStorage.removeItem(SK.bio);
+      logAuth("face",true,"signature deleted"); alert(a.faceDeleted); renderSecurity(); return;
+    }
+    secFaceMode=true; renderSecurity(); startGateCam();
+  };
+  if(secFaceMode){
+    $("sFaceCancel").onclick=()=>{ stopGateCam(); secFaceMode=false; renderSecurity(); };
+    $("sFaceShoot").onclick=async()=>{
+      try{
+        lsSet(SK.bio,{v:1,at:Date.now()});
+        const vec=await captureVectors(6);
+        acc.face=await seal(session.key,{v:vec,at:Date.now()});
+        lsSet(SK.acc,acc); logAuth("face",true,"enrolled");
+        stopGateCam(); secFaceMode=false; renderSecurity();
+      }catch(x){ $("sFaceErr").textContent=a.errNoModel; }
+    };
+    $("sFaceFile").onchange=ev=>{
+      const f=ev.target.files&&ev.target.files[0]; if(!f) return;
+      const img=new Image();
+      img.onload=async()=>{
+        try{
+          await modelReady;
+          lsSet(SK.bio,{v:1,at:Date.now()});
+          drawToSquare(img,$("gShot"),false);
+          acc.face=await seal(session.key,{v:faceVector($("gShot")),at:Date.now()});
+          lsSet(SK.acc,acc); logAuth("face",true,"enrolled from photo");
+          stopGateCam(); secFaceMode=false; renderSecurity();
+        }catch(x){ $("sFaceErr").textContent=a.errNoModel; }
+        URL.revokeObjectURL(img.src);
+      };
+      img.src=URL.createObjectURL(f);
+    };
+  }
+  $("sPass").onclick=async e=>{
+    e.preventDefault();
+    if(acc.webauthn){ delete acc.webauthn; lsSet(SK.acc,acc); logAuth("passkey",true,"removed"); renderSecurity(); return; }
+    try{
+      const cred=await navigator.credentials.create({publicKey:{
+        challenge:rnd(32), rp:{name:"Sakina"},
+        user:{id:rnd(16),name:acc.email,displayName:acc.name||acc.email},
+        pubKeyCredParams:[{type:"public-key",alg:-7},{type:"public-key",alg:-257}],
+        authenticatorSelection:{authenticatorAttachment:"platform",userVerification:"required",residentKey:"preferred"},
+        timeout:60000,attestation:"none"}});
+      acc.webauthn={id:b64(cred.rawId),at:Date.now()}; lsSet(SK.acc,acc);
+      logAuth("passkey",true,"enrolled"); renderSecurity();
+    }catch(err){ logAuth("passkey",false,"enrol"); alert(a.errPasskey); }
+  };
+  $("sTotp").onclick=e=>{
+    e.preventDefault();
+    if(acc.totp){ delete acc.totp; lsSet(SK.acc,acc); logAuth("totp",true,"removed"); secTotpDraft=null; renderSecurity(); return; }
+    secTotpDraft={secret:b32enc(rnd(20))}; renderSecurity();
+    try{ if(window.QRious) new QRious({element:$("totpQr2"),size:300,level:"M",background:"#ffffff",foreground:"#12211f",padding:0,
+      value:"otpauth://totp/Sakina:"+encodeURIComponent(acc.email)+"?secret="+secTotpDraft.secret+"&issuer=Sakina&digits=6&period=30"}); }catch(x){}
+  };
+  if($("tSave")) $("tSave").onclick=async()=>{
+    if(!(await totpVerify(secTotpDraft.secret,$("tCode").value.trim()))){ $("tErr").textContent=a.errCode; return; }
+    acc.totp=await seal(session.key,{secret:secTotpDraft.secret}); lsSet(SK.acc,acc);
+    secTotpDraft=null; logAuth("totp",true,"enrolled"); renderSecurity();
+  };
+  if($("sWithdraw")) $("sWithdraw").onclick=e=>{
+    e.preventDefault(); localStorage.removeItem(SK.consent); logAuth("consent",true,"withdrawn");
+    try{ if(stream) stopCam(); }catch(x){} renderSecurity();
+  };
+  $("sClearLog").onclick=e=>{ e.preventDefault(); localStorage.removeItem(SK.log); renderSecurity(); };
+  $("sErase").onclick=()=>{
+    if(!confirm(a.eraseConfirm)) return;
+    Object.values(SK).forEach(k=>localStorage.removeItem(k));
+    try{ if(stream) stopCam(); }catch(x){}
+    session=null; location.reload();
+  };
+}
+
 /* ---------- talk to a specialist (UAE) ---------- */
 /* [en name, ar name, number, en note, ar note, whatsapp?] */
 const HELP=[
@@ -940,7 +1681,7 @@ $("nearBtn").onclick=()=>{
 
 /* ---------- about page ---------- */
 const ABOUT={
- en:{nav:"About",back:"Back to the app",eyebrow:"About the app",title:"Sakina — a check-in for the face and what sits behind it",
+ en:{nav:"About",account:"Account",backShort:"Back",back:"Back to the app",profileTitle:"Your account",member:"Account created {d}",signedIn:"Signed in on this device",eyebrow:"About the app",title:"Sakina — a check-in for the face and what sits behind it",
   lead:"Sakina reads your facial expression through the phone camera using an image model trained in Google Teachable Machine on three expressions: sadness, happiness and anger. When the reading comes back sad or angry, the app does not stop at the label — it opens a conversation, asks what happened, listens, and then offers a plan, calming practices, sensory tools and books to read. You can talk to it by typing or by voice, and have its replies read back aloud — and when you want a real person instead, the app lists the UAE support lines answered by trained specialists and, with your permission, sorts known mental-health centres by how close they are to you. Everything is bilingual, Arabic and English.",
   goalTitle:"The goal",
   goal:"Most people notice a hard feeling only after it has already spent the day with them. Sakina puts a short pause in the middle of that day: it names what the face is showing, asks one honest question, and hands back something concrete to do in the next few minutes — not a diagnosis, and not advice shouted from a distance.",
@@ -956,7 +1697,7 @@ const ABOUT={
   tech:["Google Teachable Machine","TensorFlow.js","Progressive Web App","Arabic / English, RTL","On-device inference","Voice input and read-aloud"],
   devTitle:"The developer",dev:"Amna Al Dhaheri",devRole:"Developer and designer of the app — concept, model training, interface and content.",
   note:"Sakina is a wellbeing companion. It is not a therapist, and nothing in it is a diagnosis or medical advice."},
- ar:{nav:"عن البرنامج",back:"العودة إلى التطبيق",eyebrow:"عن البرنامج",title:"سكينة — قراءة للوجه ولما يقف خلفه",
+ ar:{nav:"عن البرنامج",account:"الحساب",backShort:"رجوع",back:"العودة إلى التطبيق",profileTitle:"حسابك",member:"أُنشئ الحساب في {d}",signedIn:"مُسجَّل الدخول في هذا الجهاز",eyebrow:"عن البرنامج",title:"سكينة — قراءة للوجه ولما يقف خلفه",
   lead:"يقرأ تطبيق «سكينة» تعبير وجهك عبر كاميرا الهاتف باستخدام نموذج صور دُرِّب في Google Teachable Machine على ثلاثة تعابير: الحزن والسعادة والغضب. وحين تأتي القراءة حزنًا أو غضبًا لا يتوقف التطبيق عند التسمية، بل يفتح محادثة يسأل فيها عمّا حدث، ويصغي، ثم يقدّم خطة عملية وممارسات تهدئة وأدوات حسّية وكتبًا مقترحة للقراءة. ويمكنك التحدث إليه كتابةً أو بالصوت، وأن يقرأ لك ردوده بصوت مسموع. وحين تريد إنسانًا حقيقيًّا بدلًا من ذلك، يعرض التطبيق خطوط الدعم في الإمارات التي يردّ عليها مختصّون مدرَّبون، ويرتّب — بإذنك — مراكز الدعم النفسي حسب قربها من موقعك. وكل ذلك بالعربية والإنجليزية.",
   goalTitle:"الهدف",
   goal:"ينتبه أكثرنا إلى الشعور الثقيل بعد أن يكون قد أمضى اليوم كله معه. تضع «سكينة» وقفة قصيرة في منتصف ذلك اليوم: تسمّي ما يظهر على الوجه، وتسأل سؤالًا واحدًا صادقًا، ثم تعيد إليك شيئًا ملموسًا تفعله في الدقائق القادمة — لا تشخيصًا، ولا نصيحة تُلقى من بعيد.",
@@ -994,9 +1735,23 @@ function renderAbout(){
    '<h3>'+esc(A.dev)+'</h3><p>'+esc(A.devRole)+'</p></div></div>'+
    '<p style="font-size:13px;color:var(--ink-soft);margin-top:16px">'+esc(A.note)+'</p>';
 }
+let onProfile=false;
+function showView(v){
+  onAbout=(v==="about"); onProfile=(v==="profile");
+  $("appView").classList.toggle("hidden",v!=="app");
+  $("profileView").classList.toggle("hidden",v!=="profile");
+  renderAbout();
+  if(v==="profile") renderSecurity();
+  $("profile").textContent=onProfile?ABOUT[L.lang].backShort:ABOUT[L.lang].account;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+$("profile").onclick=()=>showView(onProfile?"app":"profile");
 $("about").onclick=()=>{
+  if(onProfile){ showView("app"); }
   onAbout=!onAbout;
   $("appView").classList.toggle("hidden",onAbout);
+  $("profileView").classList.add("hidden");
+  $("profile").textContent=ABOUT[L.lang].account;
   renderAbout();
   window.scrollTo({top:0,behavior:"smooth"});
 };
@@ -1140,6 +1895,21 @@ try{
 }catch(e){}
 
 applyLang();
+
+/* boot the gateway: nothing in the app is reachable before it passes */
+(function boot(){
+  document.querySelector(".wrap").style.visibility="hidden";
+  if(!(window.crypto&&crypto.subtle&&window.isSecureContext)){
+    $("gate").hidden=false;
+    $("gatePanel").innerHTML='<div class="card"><h2 style="font-family:Zain,sans-serif;margin:0 0 8px">'+
+      (L.lang==="ar"?"يلزم اتصال آمن":"A secure connection is required")+'</h2><p style="font-size:14px">'+
+      (L.lang==="ar"?"تحتاج «سكينة» إلى https لتشفير قفلك وفتح الكاميرا. افتح الرابط عبر https بدل فتح الملف مباشرةً من القرص."
+                    :"Sakina needs https to encrypt your lock and to open the camera. Open it over https rather than from a file on disk.")+'</p></div>';
+    return;
+  }
+  gateMode=lsGet(SK.acc,null)?"unlock":"setup1";
+  showGate();
+})();
 </script>
 
 </body>
