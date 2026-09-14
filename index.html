@@ -176,6 +176,13 @@ a.blink.free:hover{color:#fff;filter:brightness(1.07)}
   border:1px solid var(--line);color:var(--ink-soft)}
 /* --- verification gateway --- */
 #gate[hidden]{display:none!important}
+.gateqr{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.gateqr .box{background:#fff;padding:9px;border-radius:14px;border:1px solid var(--line);line-height:0}
+.gateqr canvas{width:118px;height:118px;display:block}
+.gateqr>div:last-child{flex:1 1 180px;min-width:160px}
+.gateqr h3{font-family:Zain,sans-serif;font-size:17px;margin:0 0 3px;font-weight:700}
+.gateqr p{font-size:13px;color:var(--ink-soft);margin:0}
+.gateqr .link{font-size:11.5px;margin-top:6px}
 .facestage{position:relative;aspect-ratio:1/1;margin:14px auto 0;width:100%;max-width:260px;
   border-radius:22px;overflow:hidden;background:var(--sand-2);display:grid;place-items:center}
 .facestage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
@@ -873,7 +880,8 @@ $("send").onclick=send;
 $("input").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}});
 
 const AUTH={
- en:{footer:"Everything here stays on this device. No account on any server, nothing uploaded.",
+ en:{qrTitle:"Open on your phone",qrNote:"Scan to open Sakina on your phone. The account you create lives on the device you create it on, so set it up where you will use it.",
+  footer:"Everything here stays on this device. No account on any server, nothing uploaded.",
   setupTitle:"Create your Sakina account",setupSub:"Step 1 of 3 — your details",
   setupIntro:"Sakina keeps your account on this phone only. Your email is the name on the account; the PIN is never stored anywhere — it is turned into a one-way verifier and unlocks your data.",
   email:"Email address",name:"Your name",pin:"PIN (6 digits or more)",pin2:"Confirm PIN",
@@ -950,7 +958,8 @@ const AUTH={
   erase:"Erase everything permanently",
   eraseConfirm:"This permanently deletes everything Sakina holds on this device. It cannot be undone. Continue?",
   faceDelConfirm:"Permanently delete your face signature? You would need to enrol again to use face sign-in."},
- ar:{footer:"كل شيء هنا يبقى في هذا الجهاز. لا حساب على أي خادم، ولا رفع لأي بيانات.",
+ ar:{qrTitle:"افتحه على هاتفك",qrNote:"امسح الرمز لفتح «سكينة» على هاتفك. الحساب يبقى في الجهاز الذي تنشئه عليه، فأعِدّه على الجهاز الذي ستستخدمه.",
+  footer:"كل شيء هنا يبقى في هذا الجهاز. لا حساب على أي خادم، ولا رفع لأي بيانات.",
   setupTitle:"أنشئ حسابك في سكينة",setupSub:"الخطوة ١ من ٣ — بياناتك",
   setupIntro:"تحتفظ «سكينة» بحسابك داخل هذا الهاتف فقط. بريدك هو اسم الحساب، أما الرمز السري فلا يُخزَّن في أي مكان — يُحوَّل إلى بصمة تحقّق أحادية الاتجاه وهو ما يفتح بياناتك.",
   email:"البريد الإلكتروني",name:"اسمك",pin:"الرمز السري (٦ خانات فأكثر)",pin2:"تأكيد الرمز",
@@ -1163,7 +1172,20 @@ function shell(title,sub,inner){
    '<circle cx="8.5" cy="9" r="1.1" fill="#fff" stroke="none"/><circle cx="15.5" cy="9" r="1.1" fill="#fff" stroke="none"/>'+
    '</svg></div><div><h2>'+esc(title)+'</h2><p>'+esc(sub)+'</p></div></div>'+
    '<div class="card">'+inner+'</div>'+
+   (["setup1","unlock"].includes(gateMode)?gateQr():"")+
    '<p class="note" style="text-align:center">'+esc(A().footer)+'</p>';
+}
+function gateQr(){
+  const a=A();
+  return '<div class="card gateqr"><div class="box"><canvas id="gQr" width="264" height="264"></canvas></div>'+
+    '<div><h3>'+esc(a.qrTitle)+'</h3><p>'+esc(a.qrNote)+'</p>'+
+    '<p class="link" id="gQrLink"></p></div></div>';
+}
+function paintGateQr(){
+  const el=$("gQr"); if(!el) return;
+  const url=(typeof APP_URL!=="undefined"&&APP_URL)?APP_URL:location.href;
+  try{ if(window.QRious) new QRious({element:el,value:url,size:264,level:"M",background:"#ffffff",foreground:"#12211f",padding:0}); }catch(e){}
+  const l=$("gQrLink"); if(l) l.textContent=url;
 }
 function errBox(){ return '<div class="err" id="gErr">'+esc(gateErr)+'</div>'+
   (gateMsg?'<p class="note" style="color:var(--teal);font-weight:600">'+esc(gateMsg)+'</p>':''); }
@@ -1177,7 +1199,7 @@ function renderGate(){
   const a=A(), acc=lsGet(SK.acc,null), panel=$("gatePanel");
   const keep={}; ["gEmail","gName","gPin","gPin2","gCode"].forEach(id=>{const el=$(id); if(el) keep[id]=el.value;});
   const restore=()=>Object.keys(keep).forEach(id=>{const el=$(id); if(el&&keep[id]!=null) el.value=keep[id];});
-  setTimeout(restore,0);
+  setTimeout(()=>{restore();paintGateQr();},0);
 
   if(gateMode==="setup1"){
     panel.innerHTML=shell(a.setupTitle,a.setupSub,
